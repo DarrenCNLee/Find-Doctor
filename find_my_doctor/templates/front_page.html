@@ -59,9 +59,13 @@
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
-                                        [[for s in symptoms:]]
+                                        [[for sympt in symptoms:]]
                                             <a href="#" class="dropdown-item">
-                                                [[=s]]
+                                                [[under = '_']]
+                                                [[for under in sympt:]]
+                                                    [[sympt_wo = sympt.replace('_', ' ')]]
+                                                    [[pass]]
+                                                [[=sympt_wo]]
                                                 <label class="checkbox">
                                                     <input type="checkbox">
 
