@@ -36,6 +36,7 @@
                                 <label class="label">Find a doctor near you</label>
                                 <div class="control">
                                     <input class="input" type="text" placeholder="Search">
+                                    
 
                                 </div>
                                 <p class="help"></p>
@@ -58,15 +59,17 @@
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
-                                        <a href="#" class="dropdown-item">
-                                            Knee cramps
-                                            <label class="checkbox">
-                                                <input type="checkbox">
+                                        [[for s in symptoms:]]
+                                            <a href="#" class="dropdown-item">
+                                                [[=s]]
+                                                <label class="checkbox">
+                                                    <input type="checkbox">
 
-                                            </label>
-                                        </a>
-                                        <hr class="dropdown-divider">
-                                        <a class="dropdown-item">
+                                                </label>
+                                            </a>
+                                            <hr class="dropdown-divider">
+                                        [[pass]]
+                                        <!-- <a class="dropdown-item">
                                             Leg cramps
                                             <label class="checkbox">
                                                 <input type="checkbox">
@@ -80,7 +83,7 @@
                                                 <input type="checkbox">
 
                                             </label>
-                                        </a>
+                                        </a> -->
 
                                     </div>
                                 </div>
