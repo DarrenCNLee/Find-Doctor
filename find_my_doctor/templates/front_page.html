@@ -5,6 +5,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <style>
+        .dropdown-content {
+            max-height: 13em;
+            overflow: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -41,7 +47,7 @@
                                 <br>
 
                             </div>
-                            <input type="submit" class="button" value="Add"/>
+                            <input type="submit" class="button" value="Add" />
                         </div>
                         <div class="column is-one-third">
                             <br>
@@ -59,18 +65,18 @@
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
                                         [[for sympt in symptoms:]]
-                                            <a href="#" class="dropdown-item">
-                                                [[under = '_']]
-                                                [[for under in sympt:]]
-                                                    [[sympt_wo = sympt.replace('_', ' ')]]
-                                                    [[pass]]
-                                                [[=sympt_wo]]
-                                                <label class="checkbox">
-                                                    <input type="checkbox">
+                                        <a href="#" class="dropdown-item">
+                                            [[under = '_']]
+                                            [[for under in sympt:]]
+                                            [[sympt_wo = sympt.replace('_', ' ')]]
+                                            [[pass]]
+                                            [[=sympt_wo]]
+                                            <label class="checkbox">
+                                                <input type="checkbox">
 
-                                                </label>
-                                            </a>
-                                            <hr class="dropdown-divider">
+                                            </label>
+                                        </a>
+                                        <hr class="dropdown-divider">
                                         [[pass]]
                                         <!-- <a class="dropdown-item">
                                             Leg cramps
