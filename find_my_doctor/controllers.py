@@ -36,6 +36,7 @@ import os
 
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 
+
 @action("index")
 @action.uses("index.html", auth, T)
 def index():
@@ -45,13 +46,33 @@ def index():
     symptom_list = np.genfromtxt(symptom_list_file, dtype=str)
     return dict(symptoms=symptom_list)
 
+
 @action("front_page")
 @action.uses("front_page.html")
 def front_page():
     symptom_list = np.genfromtxt(symptom_list_file, dtype=str)
     return dict(symptoms=symptom_list)
 
+
 @action("user_info")
 @action.uses("user_info.html")
 def user_info():
     return dict()
+
+
+@action("redirect_to_user_info")
+def redirect_to_user_info():
+    redirect(URL('user_info'))
+
+
+@action("redirect_to_front")
+def redirect_to_front():
+    redirect(URL('front_page'))
+
+# @action('add', method=["GET", "POST"])
+# @action.uses( 'add.html',db, session, auth.user)
+# def add():
+#     form = Form( csrf_session=session, formstyle=FormStyleBulma)
+#     if form.accepted:
+#         redirect(URL('front_page'))
+#     return dict(form=form)
