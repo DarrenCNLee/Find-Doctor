@@ -59,15 +59,20 @@ def front_page():
 def user_info():
     return dict()
 
+@action("edit")
+@action.uses("edit.html")
+def edit():
+    return dict()
 
-@action("redirect_to_user_info")
-def redirect_to_user_info():
-    redirect(URL('user_info'))
+
+# @action("redirect_to_user_info")
+# def redirect_to_user_info():
+#     redirect(URL('user_info'))
 
 
-@action("redirect_to_front")
-def redirect_to_front():
-    redirect(URL('front_page'))
+# @action("redirect_to_front")
+# def redirect_to_front():
+#     redirect(URL('front_page'))
 
 # @action('add', method=["GET", "POST"])
 # @action.uses( 'add.html',db, session, auth.user)

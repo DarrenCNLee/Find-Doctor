@@ -5,6 +5,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
+    <style>
+        .dropdown-content {
+            max-height: 13em;
+            overflow: auto;
+        }
+    </style>
 </head>
 
 <body>
@@ -17,7 +23,7 @@
         </div>
     </section>
 
-    <div class="columns is-centered">
+    <div class="columns is-mobile is-centered">
 
         <div class="column">
 
@@ -26,22 +32,25 @@
                     <div class="columns is-mobile is-centered">
                         <div class="column is-one-third">
                             <br>
-                            <button class="button is-link is-fullwidth">
+                            <!-- <button class="button is-link is-fullwidth"> -->
+                            <!-- <a class="button is-link is-fullwidth" href="[[=URL('redirect_to_user_info')]]"> -->
+                            <a class="button is-link is-fullwidth" href="[[=URL('user_info')]]">
                                 User Info
-                            </button>
+                            </a>
+                            <!-- </button> -->
                         </div>
                         <div class="column">
 
                             <div class="field">
                                 <label class="label">Find a doctor near you</label>
                                 <div class="control">
-                                    <input class="input" type="text" placeholder="Search">
-
+                                    <input class="input" type="text" placeholder="Search" />
                                 </div>
                                 <p class="help"></p>
                                 <br>
 
                             </div>
+                            <input type="submit" class="button" value="Add" />
                         </div>
                         <div class="column is-one-third">
                             <br>
@@ -58,15 +67,21 @@
                                 </div>
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
+                                        [[for sympt in symptoms:]]
                                         <a href="#" class="dropdown-item">
-                                            Knee cramps
+                                            [[under = '_']]
+                                            [[for under in sympt:]]
+                                            [[sympt_wo = sympt.replace('_', ' ')]]
+                                            [[pass]]
+                                            [[=sympt_wo]]
                                             <label class="checkbox">
                                                 <input type="checkbox">
 
                                             </label>
                                         </a>
                                         <hr class="dropdown-divider">
-                                        <a class="dropdown-item">
+                                        [[pass]]
+                                        <!-- <a class="dropdown-item">
                                             Leg cramps
                                             <label class="checkbox">
                                                 <input type="checkbox">
@@ -80,7 +95,7 @@
                                                 <input type="checkbox">
 
                                             </label>
-                                        </a>
+                                        </a> -->
 
                                     </div>
                                 </div>
