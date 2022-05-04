@@ -25,12 +25,42 @@ db.define_table(
     Field('sex', requires=IS_IN_SET(["M", "F"])),
     Field('location', requires=IS_NOT_EMPTY()),
     Field('insurance_provider', requires=IS_NOT_EMPTY()),
+    Field('symptoms', requires=IS_NOT_EMPTY()),
     Field('first_name', requires=IS_NOT_EMPTY()),
     Field('last_name', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )
 
+db.define_table(
+    'schedule',
+    Field('working_days', requires=IS_IN_SET(["Mon", "Tue", "Wed", "Thur", "Fri"])),
+    Field('booked_days', requires=IS_IN_SET(["Mon", "Tue", "Wed", "Thur", "Fri"])),
+    Field('open_days', requires=IS_IN_SET(["Mon", "Tue", "Wed", "Thur", "Fri"])),
+)
+
+db.define_table(
+    'doctor',
+    Field('name', requires=IS_NOT_EMPTY()),
+    Field('location', requires=IS_NOT_EMPTY()),
+    Field('schedule_id', 'reference schedule'),
+    Field('insurance_provider', requires=IS_NOT_EMPTY()),
+    Field('doctor_type', requires=IS_NOT_EMPTY()),
+)
+
+db.define_table(
+    'review',
+    Field('doctor_id', 'reference doctor'),
+    Field('star_rating', requires=IS_FLOAT_IN_RANGE(0, 5)),
+    Field('review_message'),
+    Field('user_id', 'reference user_info'),
+)
+
+
 db.user_info.id.readable = db.user_info.id.writable = False
-# db.user_info.user_email.readable = db.user_info.user_email.writable = False
+db.user_info.user_email.readable = db.user_info.user_email.writable = False
+
+db.schedule.id.readable = db.schedule.id.writable = False
+db.doctor.id.readable = db.doctor.id.writable = False
+db.review.id.readable = db.review.id.writable = False
 
 db.commit()
