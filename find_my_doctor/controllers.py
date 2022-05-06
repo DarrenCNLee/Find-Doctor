@@ -25,9 +25,12 @@ session, db, T, auth, and tempates are examples of Fixtures.
 Warning: Fixtures MUST be declared with @action.uses({fixtures}) else your app will result in undefined behavior
 """
 
-from this import d
-from py4web import action, request, abort, redirect, URL
+from py4web import action, request, abort, redirect, URL, Field
 from yatl.helpers import A
+from py4web.utils.form import Form, FormStyleBulma
+from py4web.utils.url_signer import URLSigner
+from .models import get_user_email
+from pydal.validators import *
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from .settings import APP_FOLDER
 # import pandas as pd
@@ -40,11 +43,15 @@ symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 @action("index")
 @action.uses("index.html", auth, T) #, url_signer, db, auth.user
 def index():
-    # user = auth.get_user()
-    # message = T("Hello {first_name}".format(**user) if user else "Hello")
-    # actions = {"allowed_actions": auth.param.allowed_actions}
-    symptom_list = np.genfromtxt(symptom_list_file, dtype=str)
-    return dict(symptoms=symptom_list)
+
+    symptom_list = (line.strip() for line in open(symptom_list_file))
+    # symptom_list = np.genfromtxt(symptom_list_file, dtype=str)
+    form = Form([Field('symptomps', requires=IS_IN_SET(symptom_list, zero=T('choose one'), error_message='must select from the list'))],
+                deletable=False,
+                csrf_session=session,
+                formstyle=FormStyleBulma)
+
+    return dict(form=form, symptoms=symptom_list)
 
 
 # @action("front_page")
