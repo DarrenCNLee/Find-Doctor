@@ -20,3 +20,45 @@ CREATE TABLE "auth_user_tag_groups"(
 );
 success!
 success!
+success!
+timestamp: 2022-05-05T21:01:29.612870
+CREATE TABLE "user_info"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "age" CHAR(512),
+    "sex" CHAR(512),
+    "location" CHAR(512),
+    "insurance_provider" CHAR(512),
+    "symptoms" CHAR(512),
+    "first_name" CHAR(512),
+    "last_name" CHAR(512),
+    "user_email" CHAR(512)
+);
+success!
+timestamp: 2022-05-05T21:01:29.757575
+CREATE TABLE "schedule"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "working_days" CHAR(512),
+    "booked_days" CHAR(512),
+    "open_days" CHAR(512)
+);
+success!
+timestamp: 2022-05-05T21:01:29.782127
+CREATE TABLE "doctor"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "name" CHAR(512),
+    "location" CHAR(512),
+    "schedule_id" INTEGER REFERENCES "schedule" ("id") ON DELETE CASCADE  ,
+    "insurance_provider" CHAR(512),
+    "doctor_type" CHAR(512)
+);
+success!
+timestamp: 2022-05-05T21:01:29.806750
+CREATE TABLE "review"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "doctor_id" INTEGER REFERENCES "doctor" ("id") ON DELETE CASCADE  ,
+    "star_rating" CHAR(512),
+    "review_message" CHAR(512),
+    "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  
+);
+success!
+success!

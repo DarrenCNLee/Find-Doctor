@@ -38,7 +38,7 @@ symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 
 
 @action("index")
-@action.uses("index.html", auth, T)
+@action.uses("index.html", auth, T) #, url_signer, db, auth.user
 def index():
     # user = auth.get_user()
     # message = T("Hello {first_name}".format(**user) if user else "Hello")
@@ -54,12 +54,23 @@ def index():
 #     return dict(symptoms=symptom_list)
 
 
-@action("user_info")
-@action.uses("user_info.html")
+@action("user_info") #, method=["GET", "POST"]
+@action.uses("user_info.html") #, url_signer, db, session, auth.user
 def user_info():
+    #db get user_info of get_user_email return that
+    #assert test
     return dict()
 
-@action("edit")
-@action.uses("edit.html")
+# @action("edit_user_info/<user_info_id:int>") #, method=["GET", "POST"]
+# @action.uses("edit_user_info.html") #, url_signer, db, session, auth.user
+# def user_info():
+#     build form = Form
+#               report = db(user_info)
+#     form.accepted
+#     redirect url user_info.htmll
+#     return dict()
+
+@action("edit")  #, method=["GET", "POST"]
+@action.uses("edit.html")#, url_signer, db, session, auth.user
 def edit():
     return dict()
