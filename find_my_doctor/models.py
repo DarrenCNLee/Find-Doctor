@@ -2,9 +2,13 @@
 This file defines the database models
 """
 
-from .common import db, Field
+from .common import db, Field, auth, T
 from pydal.validators import *
+from .settings import APP_FOLDER
+import os
 
+symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
+symptom_list = (line.strip() for line in open(symptom_list_file))
 
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
@@ -28,6 +32,13 @@ db.define_table(
     Field('symptoms', requires=IS_NOT_EMPTY()),
     Field('first_name', requires=IS_NOT_EMPTY()),
     Field('last_name', requires=IS_NOT_EMPTY()),
+    Field('user_email', default=get_user_email),
+)
+
+db.define_table(
+    'symptom',
+    Field('symptom', requires=IS_IN_SET(symptom_list, zero=T('choose one'), error_message='must select from the list')),
+    # Field('severity', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )
 
@@ -58,6 +69,7 @@ db.define_table(
 
 db.user_info.id.readable = db.user_info.id.writable = False
 db.user_info.user_email.readable = db.user_info.user_email.writable = False
+db.symptom.user_email.readable = db.symptom.user_email.writable = False
 
 db.schedule.id.readable = db.schedule.id.writable = False
 db.doctor.id.readable = db.doctor.id.writable = False

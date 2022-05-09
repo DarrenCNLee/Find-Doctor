@@ -38,27 +38,52 @@ import numpy as np
 import os
 
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
+disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
+
+url_signer = URLSigner(session)
+
+# The auth.user below forces login.
 
 
-@action("index")
-@action.uses("index.html", auth, T) #, url_signer, db, auth.user
+@action('index', method=["GET", "POST"])
+@action.uses('index.html', url_signer, db, auth.user)
 def index():
 
     symptom_list = (line.strip() for line in open(symptom_list_file))
-    # symptom_list = np.genfromtxt(symptom_list_file, dtype=str)
-    form = Form([Field('symptomps', requires=IS_IN_SET(symptom_list, zero=T('choose one'), error_message='must select from the list'))],
-                deletable=False,
-                csrf_session=session,
-                formstyle=FormStyleBulma)
+    disease = np.genfromtxt(disease_file, delimiter=',', dtype=str)
+    probability = np.zeros(disease.shape[0], dtype=float)
 
-    return dict(form=form, symptoms=symptom_list)
+    rows = db(db.symptom.user_email == get_user_email()).select().as_list()
+    rows_np = []
+
+    for e in rows:
+        rows_np.append(e["symptom"])
+
+    for i, e in enumerate(disease):
+        counts = 17 - e[e==''].shape[0]
+        match = np.intersect1d(np.array(rows_np), e)
+        probability[i] = match.shape[0]/counts
 
 
-# @action("front_page")
-# @action.uses("front_page.html")
-# def front_page():
-#     symptom_list = np.genfromtxt(symptom_list_file, dtype=str)
-#     return dict(symptoms=symptom_list)
+    form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
+    
+    form.structure.find('[type=submit]')[0]['_value'] = 'Add'
+
+    if form.accepted:
+        redirect(URL('index'))
+
+
+    return dict(rows=rows, form=form, symptoms=symptom_list, url_signer=url_signer, disease=disease, count=probability)
+
+
+# @action('add_symptom', method=["GET", "POST"])
+# @action.uses('add_symptom.html', url_signer, db, session, auth.user)
+# def add_symptom():
+#     form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
+#     if form.accepted:
+#         redirect(URL('index'))
+
+#     return dict(form=form)
 
 
 @action("user_info") #, method=["GET", "POST"]

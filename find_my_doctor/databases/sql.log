@@ -67,3 +67,190 @@ success!
 success!
 success!
 success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2022-05-09T04:34:52.626664
+CREATE TABLE "symptomp"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_email" CHAR(512),
+    "symptomp" CHAR(512)
+);
+success!
+success!
+success!
+timestamp: 2022-05-09T04:35:51.530969
+CREATE TABLE "symptomps"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_email" CHAR(512),
+    "symptomp" CHAR(512)
+);
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2022-05-09T04:49:05.897277
+ALTER TABLE "symptomp" ADD "symp" CHAR(512);
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2022-05-09T04:53:02.004777
+CREATE TABLE "symptom"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "symp" CHAR(512),
+    "user_email" CHAR(512)
+);
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2022-05-09T05:04:23.119464
+ALTER TABLE "symptom" ADD "symptom" CHAR(512);
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!

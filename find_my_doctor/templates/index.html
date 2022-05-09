@@ -39,21 +39,38 @@
                             </a>
                             <!-- </button> -->
                         </div>
+                        <div class="column is-one-third">
+                            
+                            <label class="label">Find a doctor near you</label>
+                                
+                                <p class="help"></p>
+
+                            [[=form]]
+
+                            <h1 class="subtitle">Symptoms Listed:</h1>
+                            <ul>
+                                [[for row in rows:]]
+                                <li>[[=row["symptom"]]]
+                                </li>
+                                [[pass]]
+                            </ul>
+
+                        </div>
                         <div class="column">
 
                             <div class="field">
-                                <label class="label">Find a doctor near you</label>
-                                [[=form]]
-                                <p class="help"></p>
+                                
                                 <br>
 
-                            </div>
-                            <input type="submit" class="button" value="Add" />
-                        </div>
-                        <div class="column is-one-third">
-                            <br>
+                                <div class="column is-one-third">
 
-                            <div class="dropdown is-hoverable">
+                                    <ul>
+                                        [[for row, c in zip(disease, count):]]
+                                        <li>[[=row[0]]] : [[=c]]
+                                        </li>
+                                        [[pass]]
+                                    </ul>
+                                    <!-- <div class="dropdown is-hoverable">
                                 <div class="dropdown-trigger">
                                     <button class="button is-warning is-fullwidth" aria-haspopup="true"
                                         aria-controls="dropdown-menu">
@@ -66,21 +83,21 @@
                                 
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
-                                        [[for sympt in symptoms:]]
+                                        [[#for sympt in symptoms:]]
                                         <a href="#" class="dropdown-item">
-                                            [[under = '_']]
-                                            [[for under in sympt:]]
-                                            [[sympt_wo = sympt.replace('_', ' ')]]
-                                            [[pass]]
-                                            [[=sympt_wo]]
+                                            [[#under = '_']]
+                                            [[#for under in sympt:]]
+                                            [[#sympt_wo = sympt.replace('_', ' ')]]
+                                            [[#pass]]
+                                            [[#=sympt_wo]]
                                             <label class="checkbox">
                                                 <input type="checkbox">
 
                                             </label>
                                         </a>
                                         <hr class="dropdown-divider">
-                                        [[pass]]
-                                        <!-- <a class="dropdown-item">
+                                        [[#pass]]
+                                        <a class="dropdown-item">
                                             Leg cramps
                                             <label class="checkbox">
                                                 <input type="checkbox">
@@ -94,12 +111,12 @@
                                                 <input type="checkbox">
 
                                             </label>
-                                        </a> -->
+                                        </a> 
 
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div> -->
+                                </div>
             </section>
 
             <section class="section">
