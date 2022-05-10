@@ -31,7 +31,7 @@ from py4web.utils.form import Form, FormStyleBulma
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 from pydal.validators import *
-from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
+from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash, signed_url, Field
 from .settings import APP_FOLDER
 # import pandas as pd
 import numpy as np
@@ -91,7 +91,10 @@ def index():
 def user_info():
     #db get user_info of get_user_email return that
     #assert test
-    return dict()
+    # rows = db((db.user_info.user_email == get_user_email())).select()
+    return dict(
+        #rows=rows
+        )
 
 # @action("edit_user_info/<user_info_id:int>") #, method=["GET", "POST"]
 # @action.uses("edit_user_info.html") #, url_signer, db, session, auth.user
@@ -101,6 +104,24 @@ def user_info():
 #     form.accepted
 #     redirect url user_info.htmll
 #     return dict()
+
+
+@action('edit_user_info/<user_info_id:int>', method=["GET", "POST"])
+@action.uses('edit_user_info.html', url_signer.verify(), url_signer, db, session, auth.user)
+def edit_user_info(user_info_id=None):
+    assert user_info_id is not None
+    user = db.user_info[user_info_id]
+    
+    if user["user_email"] != get_user_email() or user is None:
+        redirect(URL('user_info'))
+
+    form = Form(db.user_info, record=user, deletable=False, csrf_session=session,
+                formstyle=FormStyleBulma)
+    
+    if form.accepted:
+        redirect(URL('user_info'))
+    
+    return dict(form=form)
 
 @action("edit")  #, method=["GET", "POST"]
 @action.uses("edit.html")#, url_signer, db, session, auth.user
