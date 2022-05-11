@@ -36,6 +36,10 @@ from .settings import APP_FOLDER
 # import pandas as pd
 import numpy as np
 import os
+import uuid
+import random
+
+url_signer = URLSigner(session)
 
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
@@ -60,21 +64,28 @@ def index():
         rows_np.append(e["symptom"])
 
     for i, e in enumerate(disease):
-        counts = 17 - e[e==''].shape[0]
+        counts = 17 - e[e == ''].shape[0]
         match = np.intersect1d(np.array(rows_np), e)
         probability[i] = match.shape[0]/counts
 
-
     form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
-    
+
     form.structure.find('[type=submit]')[0]['_value'] = 'Add'
 
     if form.accepted:
         redirect(URL('index'))
 
+    return dict(rows=rows, form=form, symptoms=symptom_list, url_signer=url_signer, disease=disease, count=probability,
+                search_url=URL('search', signer=url_signer))
 
-    return dict(rows=rows, form=form, symptoms=symptom_list, url_signer=url_signer, disease=disease, count=probability)
 
+@action('search')
+@action.uses()
+def search():
+    q = request.params.get("q")
+    results = [q + ":" + str(uuid.uuid1())
+               for _ in range(random.randint(2, 6))]
+    return dict(results=results)
 
 # @action('add_symptom', method=["GET", "POST"])
 # @action.uses('add_symptom.html', url_signer, db, session, auth.user)
@@ -86,15 +97,15 @@ def index():
 #     return dict(form=form)
 
 
-@action("user_info") #, method=["GET", "POST"]
-@action.uses("user_info.html") #, url_signer, db, session, auth.user
+@action("user_info")  # , method=["GET", "POST"]
+@action.uses("user_info.html")  # , url_signer, db, session, auth.user
 def user_info():
-    #db get user_info of get_user_email return that
+    # db get user_info of get_user_email return that
     #assert test
     # rows = db((db.user_info.user_email == get_user_email())).select()
     return dict(
-        #rows=rows
-        )
+        # rows=rows
+    )
 
 # @action("edit_user_info/<user_info_id:int>") #, method=["GET", "POST"]
 # @action.uses("edit_user_info.html") #, url_signer, db, session, auth.user
@@ -111,19 +122,20 @@ def user_info():
 def edit_user_info(user_info_id=None):
     assert user_info_id is not None
     user = db.user_info[user_info_id]
-    
+
     if user["user_email"] != get_user_email() or user is None:
         redirect(URL('user_info'))
 
     form = Form(db.user_info, record=user, deletable=False, csrf_session=session,
                 formstyle=FormStyleBulma)
-    
+
     if form.accepted:
         redirect(URL('user_info'))
-    
+
     return dict(form=form)
 
-@action("edit")  #, method=["GET", "POST"]
-@action.uses("edit.html")#, url_signer, db, session, auth.user
+
+@action("edit")  # , method=["GET", "POST"]
+@action.uses("edit.html")  # , url_signer, db, session, auth.user
 def edit():
     return dict()
