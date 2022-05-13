@@ -37,7 +37,7 @@ db.define_table(
 
 db.define_table(
     'symptom',
-    Field('symptom', requires=IS_IN_SET(symptom_list, zero=T('choose one'), error_message='must select from the list')),
+    Field('symptom_list', requires=IS_IN_SET(symptom_list, zero=T('choose one'), error_message='must select from the list')),
     # Field('severity', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )
