@@ -61,7 +61,7 @@ def index():
     rows_np = []
 
     for e in rows:
-        rows_np.append(e["symptom"])
+        rows_np.append(["symptom_list"])
 
     for i, e in enumerate(disease):
         counts = 17 - e[e == ''].shape[0]
@@ -83,9 +83,21 @@ def index():
 @action.uses()
 def search():
     q = request.params.get("q")
-    results = [q + ":" + str(uuid.uuid1())
-               for _ in range(random.randint(2, 6))]
-    return dict(results=results)
+
+    #scuffed way of getting symptom list
+    
+    
+    rows = db(db.symptom.symptom_list).select().as_list()
+    symptoms = list()
+    for row in rows:
+        symptoms.append(row['symptom_list'])
+
+    results = db(
+        (db.symptom.symptom_list == q)
+    ).select().as_list()
+    print(q, results)
+    print("database: " + str(db.symptom.symptom_list))
+    return dict(symptoms=symptoms, results=results)
 
 # @action('add_symptom', method=["GET", "POST"])
 # @action.uses('add_symptom.html', url_signer, db, session, auth.user)

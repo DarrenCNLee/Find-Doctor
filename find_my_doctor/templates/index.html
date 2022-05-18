@@ -42,15 +42,21 @@
                         <div class="column is-one-third">
                             
                             <label class="label">Find a doctor near you</label>
-                                
-                                <p class="help"></p>
-
+                                                            
                             [[=form]]
+                            
+                            <div class="section" id="vue-target" v-cloak>
+                                <div class="control block">
+                                  <input class="input" type="text" v-model="query" @keyup="search" />
+                                </div>
+                              
+                                <div v-for="r in results">{{r}}</div>
+                            </div>
 
                             <h1 class="subtitle">Symptoms Listed:</h1>
                             <ul>
                                 [[for row in rows:]]
-                                <li>[[=row["symptom"]]]
+                                <li>[[=row["symptom_list"]]]
                                 </li>
                                 [[pass]]
                             </ul>
@@ -184,3 +190,11 @@
 </body>
 
 </html>
+
+[[block page_scripts]]
+<!-- Loads the index-specific js for Vue -->
+<script>
+  let search_url = "[[=XML(search_url)]]";
+</script>
+<script src="js/index.js"></script>
+[[end]]
