@@ -82,21 +82,37 @@ def index():
 @action('search')
 @action.uses()
 def search():
-    q = request.params.get("q")
+    q = request.params.get("q").lower()
 
-    #scuffed way of getting symptom list
-    
-    
+    #scuffed way of getting symptom list (in lower case)
     rows = db(db.symptom.symptom_list).select().as_list()
     symptoms = list()
     for row in rows:
-        symptoms.append(row['symptom_list'])
+        symptoms.append(row['symptom_list'].lower())
+    print("symptoms: " + str(symptoms))
 
-    results = db(
-        (db.symptom.symptom_list == q)
-    ).select().as_list()
+    #check if the word starts with 
+    autocomplete = list()
+    for symptom in symptoms:
+        if(len(q.split(" ")) > 1):
+            if symptom.startswith(q):
+                autocomplete.append(symptom)
+        else:
+            for word in symptom.split(" "):
+                if word.startswith(q):
+                    autocomplete.append(symptom)
+    print("autocomplete: " + str(autocomplete))
+    results = results = db(
+        (db.symptom.symptom_list == q) | (db.symptom.symptom_list == q.capitalize())
+    ).select()
+
+    for item in autocomplete:
+        results |= db(
+            (db.symptom.symptom_list == item) | (db.symptom.symptom_list == item.capitalize())).select()
+
+    results = results.as_list()
+
     print(q, results)
-    print("database: " + str(db.symptom.symptom_list))
     return dict(symptoms=symptoms, results=results)
 
 # @action('add_symptom', method=["GET", "POST"])
