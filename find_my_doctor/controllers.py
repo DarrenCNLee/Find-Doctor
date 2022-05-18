@@ -44,8 +44,6 @@ url_signer = URLSigner(session)
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
 
-url_signer = URLSigner(session)
-
 # The auth.user below forces login.
 
 
@@ -84,14 +82,14 @@ def index():
 def search():
     q = request.params.get("q").lower()
 
-    #scuffed way of getting symptom list (in lower case)
+    # scuffed way of getting symptom list (in lower case)
     rows = db(db.symptom.symptom_list).select().as_list()
     symptoms = list()
     for row in rows:
         symptoms.append(row['symptom_list'].lower())
     print("symptoms: " + str(symptoms))
 
-    #check if the word starts with 
+    # check if the word starts with
     autocomplete = list()
     for symptom in symptoms:
         if(len(q.split(" ")) > 1):
@@ -103,7 +101,8 @@ def search():
                     autocomplete.append(symptom)
     print("autocomplete: " + str(autocomplete))
     results = results = db(
-        (db.symptom.symptom_list == q) | (db.symptom.symptom_list == q.capitalize())
+        (db.symptom.symptom_list == q) | (
+            db.symptom.symptom_list == q.capitalize())
     ).select()
 
     for item in autocomplete:
@@ -167,3 +166,23 @@ def edit_user_info(user_info_id=None):
 @action.uses("edit.html")  # , url_signer, db, session, auth.user
 def edit():
     return dict()
+
+
+# @action("setup")
+# @action.uses(db)
+# def setup():
+#     db(db.review).delete()
+
+
+@action("get_rating")
+@action.uses(db, auth.user)
+def get_rating():
+    doctor_id = request.params.get("doctor_id")
+    rating = request.json.get("star_rating")
+    assert doctor_id is not None and rating is not None
+    db.stars.update_or_insert(
+        ((db.review.doctor_id == doctor_id) & (db.review.rater == get_user())),
+        doctor_id=doctor_id,
+        rater=get_user(),
+        star_rating=rating
+    )

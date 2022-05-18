@@ -13,6 +13,9 @@ symptom_list = (line.strip() for line in open(symptom_list_file))
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
 
+def get_user():
+    return auth.current_user.get("id") if auth.current_user else None
+
 
 ### Define your table below
 #
@@ -64,6 +67,7 @@ db.define_table(
     Field('star_rating', requires=IS_FLOAT_IN_RANGE(0, 5)),
     Field('review_message'),
     Field('user_id', 'reference user_info'),
+    Field("rater", "reference auth_user", default=get_user)
 )
 
 
