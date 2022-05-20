@@ -125,13 +125,13 @@ def search():
 
 
 @action("user_info")  # , method=["GET", "POST"]
-@action.uses("user_info.html")  # , url_signer, db, session, auth.user
+@action.uses("user_info.html"  , url_signer, db, session, auth.user)
 def user_info():
     # db get user_info of get_user_email return that
     #assert test
-    # rows = db((db.user_info.user_email == get_user_email())).select()
+    rows = db(db.user_info.user_email == get_user_email()).select().as_list()
     return dict(
-        # rows=rows
+        rows=rows
     )
 
 # @action("edit_user_info/<user_info_id:int>") #, method=["GET", "POST"]
