@@ -28,13 +28,12 @@ def get_user():
 
 db.define_table(
     'user_info',
-    Field('age', requires=IS_INT_IN_RANGE(0, 150)),
-    Field('sex', requires=IS_IN_SET(["M", "F"])),
-    Field('location', requires=IS_NOT_EMPTY()),
-    Field('insurance_provider', requires=IS_NOT_EMPTY()),
-    Field('symptoms', requires=IS_NOT_EMPTY()),
     Field('first_name', requires=IS_NOT_EMPTY()),
     Field('last_name', requires=IS_NOT_EMPTY()),
+    Field('age', requires=IS_INT_IN_RANGE(0, 150)),
+    Field('sex', requires=IS_IN_SET(["M", "F"])),
+    # Field('location', requires=IS_NOT_EMPTY()),
+    # Field('insurance_provider', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )
 
@@ -43,6 +42,17 @@ db.define_table(
     Field('symptom_list', requires=IS_IN_SET(symptom_list, zero=T('choose one'), error_message='must select from the list')),
     # Field('severity', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
+)
+
+db.define_table(
+    'symptoms',
+    Field('symptom_name', requires=IS_NOT_EMPTY()),
+)
+
+db.define_table(
+    'has_symptom',
+    Field('user_id', 'reference user_info'),
+    Field('symptom_id', 'reference symptoms'),
 )
 
 db.define_table(

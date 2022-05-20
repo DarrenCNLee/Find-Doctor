@@ -1,7 +1,6 @@
-timestamp: 2022-04-14T01:03:02.239017
+timestamp: 2022-05-19T17:58:23.620896
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "username" CHAR(512) UNIQUE,
     "email" CHAR(512) UNIQUE,
     "password" CHAR(512),
     "first_name" CHAR(512),
@@ -12,29 +11,44 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2022-04-14T01:03:02.263816
+timestamp: 2022-05-19T17:58:23.667025
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "tagpath" CHAR(512),
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
 success!
-success!
-success!
-timestamp: 2022-05-05T21:01:29.612870
+timestamp: 2022-05-19T17:58:23.675953
 CREATE TABLE "user_info"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "age" CHAR(512),
     "sex" CHAR(512),
-    "location" CHAR(512),
-    "insurance_provider" CHAR(512),
-    "symptoms" CHAR(512),
     "first_name" CHAR(512),
     "last_name" CHAR(512),
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2022-05-05T21:01:29.757575
+timestamp: 2022-05-19T17:58:23.721584
+CREATE TABLE "symptom"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "symptom_list" CHAR(512),
+    "user_email" CHAR(512)
+);
+success!
+timestamp: 2022-05-19T17:58:23.728528
+CREATE TABLE "symptoms"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "symptom_name" CHAR(512)
+);
+success!
+timestamp: 2022-05-19T17:58:23.734480
+CREATE TABLE "has_symptom"(
+    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
+    "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  ,
+    "symptom_id" INTEGER REFERENCES "symptoms" ("id") ON DELETE CASCADE  
+);
+success!
+timestamp: 2022-05-19T17:58:23.740928
 CREATE TABLE "schedule"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "working_days" CHAR(512),
@@ -42,7 +56,7 @@ CREATE TABLE "schedule"(
     "open_days" CHAR(512)
 );
 success!
-timestamp: 2022-05-05T21:01:29.782127
+timestamp: 2022-05-19T17:58:23.749360
 CREATE TABLE "doctor"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" CHAR(512),
@@ -52,204 +66,15 @@ CREATE TABLE "doctor"(
     "doctor_type" CHAR(512)
 );
 success!
-timestamp: 2022-05-05T21:01:29.806750
+timestamp: 2022-05-19T17:58:23.756801
 CREATE TABLE "review"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "doctor_id" INTEGER REFERENCES "doctor" ("id") ON DELETE CASCADE  ,
     "star_rating" CHAR(512),
     "review_message" CHAR(512),
-    "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  
+    "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  ,
+    "rater" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-timestamp: 2022-05-09T04:34:52.626664
-CREATE TABLE "symptomp"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "user_email" CHAR(512),
-    "symptomp" CHAR(512)
-);
-success!
-success!
-success!
-timestamp: 2022-05-09T04:35:51.530969
-CREATE TABLE "symptomps"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "user_email" CHAR(512),
-    "symptomp" CHAR(512)
-);
-success!
-success!
-success!
-success!
-success!
-success!
-timestamp: 2022-05-09T04:49:05.897277
-ALTER TABLE "symptomp" ADD "symp" CHAR(512);
-success!
-success!
-success!
-success!
-success!
-success!
-timestamp: 2022-05-09T04:53:02.004777
-CREATE TABLE "symptom"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "symp" CHAR(512),
-    "user_email" CHAR(512)
-);
-success!
-success!
-success!
-success!
-success!
-success!
-timestamp: 2022-05-09T05:04:23.119464
-ALTER TABLE "symptom" ADD "symptom" CHAR(512);
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
 success!
 success!
 success!
