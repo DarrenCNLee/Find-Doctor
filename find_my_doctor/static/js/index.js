@@ -12,6 +12,7 @@ let init = (app) => {
         // Complete as you see fit.
         query: "",
         results: [],
+        symptom_list: [],
         doctors: [],
     };
 
@@ -21,6 +22,12 @@ let init = (app) => {
         a.map((e) => { e._idx = k++; });
         return a;
     };
+
+    app.add_symptom = function() {
+        app.vue.symptom_list.push(app.vue.query);
+        app.vue.query = "";
+        app.vue.results = [];
+    }
 
     app.search = function () {
         if (app.vue.query.length > 1) {
@@ -53,6 +60,7 @@ let init = (app) => {
     app.methods = {
         // Complete as you see fit.
         search: app.search,
+        add_symptom: app.add_symptom,
         set_stars: app.set_stars,
         stars_out: app.stars_out,
         stars_over: app.stars_over,
