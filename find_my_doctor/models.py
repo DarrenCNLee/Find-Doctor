@@ -30,7 +30,7 @@ db.define_table(
     'user_info',
     Field('first_name', requires=IS_NOT_EMPTY()),
     Field('last_name', requires=IS_NOT_EMPTY()),
-    Field('age', requires=IS_INT_IN_RANGE(0, 150)),
+    Field('age', requires=IS_INT_IN_RANGE(0, 151)),
     Field('sex', requires=IS_IN_SET(["M", "F"])),
     # Field('location', requires=IS_NOT_EMPTY()),
     # Field('insurance_provider', requires=IS_NOT_EMPTY()),

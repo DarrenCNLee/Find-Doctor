@@ -17,7 +17,16 @@
             <td>[[=row.last_name]]</td>
             <td>[[=row.age]]</td>
             <td>[[=row.sex]]</td>
+            <td>
+                <a class="button is-warning" href="[[=URL('edit_user_info',row.id,signer=url_signer)]]">
+                    <span> Edit User Info</span>
+                </a>
+            </td>
         </tr>
+        [[pass]]
     </table>
 
+    <a class="button is-primary" href="[[=URL('add_user_info',signer=url_signer)]]">
+        <span>Add User Info</span>
+    </a>
 </div>

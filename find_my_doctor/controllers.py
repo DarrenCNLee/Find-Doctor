@@ -45,6 +45,8 @@ symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
 
 # assigns a symptom to a user within the "has_symptom" db, inputs are an entry from the "user_info" and "symptoms" db
+
+
 def has(u, s):
     db.has_symptom.update_or_insert(
         (
@@ -56,6 +58,8 @@ def has(u, s):
     )
 
 # The auth.user below forces login.
+
+
 @action('index', method=["GET", "POST"])
 @action.uses('index.html', url_signer, db, auth.user)
 def index():
@@ -143,15 +147,15 @@ def search():
 
 
 @action("user_info")  # , method=["GET", "POST"]
-@action.uses("user_info.html"  , url_signer, db, session, auth.user)
+@action.uses("user_info.html", url_signer, db, session, auth.user)
 def user_info(user_id=None):
     # db get user_info of get_user_email return that
     # assert test
-    rows = db(db.user_info.user_email == get_user_email()).select().as_list()
+    rows = db(db.user_info.user_email == get_user_email()).select()
     if rows is None:
-        redirect(URL('add_user_info'))
+        redirect(URL('add_user_info', user_id))
     return dict(
-        rows=rows
+        rows=rows, url_signer=url_signer
     )
 
 
@@ -189,7 +193,8 @@ def get_rating():
     rating = request.json.get("star_rating")
     assert doctor_id is not None and rating is not None
     db.stars.update_or_insert(
-        ((db.review.doctor_id == doctor_id) & (db.review.rater == get_user_email())),
+        ((db.review.doctor_id == doctor_id) &
+         (db.review.rater == get_user_email())),
         doctor_id=doctor_id,
         rater=get_user_email(),
         star_rating=rating
