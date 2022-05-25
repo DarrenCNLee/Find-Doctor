@@ -76,12 +76,12 @@ def index():
     # create empty probability for our regression model
     probability = pd.DataFrame(columns=["disease", "prob"])
     probability['disease'] = disease_list["Disease"]
-    probability['prob'] = 0.0
+    
     rows = db(db.symptom.user_email == get_user_email()).select().as_list()
 
     # initialize rows for model use
     user_symptoms = []
-
+    prob_list = []
     for e in rows:
         user_symptoms.append(e['symptom_list'])
     user_symptoms = np.asarray(user_symptoms)
@@ -89,8 +89,9 @@ def index():
     for i, row in disease_list.iterrows():
         total = row.count()
         common = np.intersect1d(row.dropna().to_numpy(), user_symptoms)
-        probability['prob'][i] = common.shape[0] / total
+        prob_list.append(common.shape[0] / total)
 
+    probability['prob'] = prob_list
     probability = probability.sort_values(by=['prob'], ascending=False).drop_duplicates(subset=['disease'], keep='first').head(n=5)
 
     form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
