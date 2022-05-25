@@ -33,7 +33,7 @@ from .models import get_user_email
 from pydal.validators import *
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash, signed_url, Field
 from .settings import APP_FOLDER
-# import pandas as pd
+import pandas as pd
 import numpy as np
 import os
 import uuid
@@ -71,23 +71,27 @@ def index():
             db.symptoms.insert(symptom_name=s)
 
     # create disease list, each line has the disease name first then followed by all the symptoms
-    disease_list = np.genfromtxt(disease_file, delimiter=',', dtype=str)
-
+    # disease_list = np.genfromtxt(disease_file, delimiter=',', dtype=str)
+    disease_list = pd.read_csv(disease_file, sep=",", lineterminator="\n")
     # create empty probability for our regression model
-    probability = np.zeros(disease_list.shape[0], dtype=float)
-
+    probability = pd.DataFrame(columns=["disease", "prob"])
+    probability['disease'] = disease_list["Disease"]
+    probability['prob'] = 0.0
     rows = db(db.symptom.user_email == get_user_email()).select().as_list()
 
     # initialize rows for model use
-    rows_np = []
+    user_symptoms = []
 
     for e in rows:
-        rows_np.append(["symptom_list"])
+        user_symptoms.append(e['symptom_list'])
+    user_symptoms = np.asarray(user_symptoms)
     # model calculation for corresponding symptoms to diseases
-    for i, e in enumerate(disease_list):
-        counts = 17 - e[e == ''].shape[0]
-        match = np.intersect1d(np.array(rows_np), e)
-        probability[i] = match.shape[0]/counts
+    for i, row in disease_list.iterrows():
+        total = row.count()
+        common = np.intersect1d(row.dropna().to_numpy(), user_symptoms)
+        probability['prob'][i] = common.shape[0] / total
+
+    probability = probability.sort_values(by=['prob'], ascending=False).drop_duplicates(subset=['disease'], keep='first').head(n=5)
 
     form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
     form.structure.find('[type=submit]')[0]['_value'] = 'Add'
@@ -95,7 +99,7 @@ def index():
     if form.accepted:
         redirect(URL('index'))
 
-    return dict(rows=rows, form=form, symptoms=symptom_list, url_signer=url_signer, disease=disease_list, count=probability,
+    return dict(rows=rows, form=form, symptoms=symptom_list, url_signer=url_signer, disease=probability,
                 search_url=URL('search', signer=url_signer))
 
 

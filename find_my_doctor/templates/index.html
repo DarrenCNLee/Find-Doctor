@@ -75,8 +75,9 @@
                                 <div class="column is-one-third">
 
                                     <ul>
-                                        [[for row, c in zip(disease, count):]]
-                                        <li>[[=row[0]]] : [[=c]]
+                                        [[=disease.shape]]
+                                        [[for i, row in disease.iterrows():]]
+                                        <li>[[=row["disease"]]] : [[=row["prob"]]]
                                         </li>
                                         [[pass]]
                                     </ul>
