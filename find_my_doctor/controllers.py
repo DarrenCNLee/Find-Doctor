@@ -76,7 +76,7 @@ def index():
     # create empty probability for our regression model
     probability = pd.DataFrame(columns=["disease", "prob"])
     probability['disease'] = disease_list["Disease"]
-    
+
     rows = db(db.symptom.user_email == get_user_email()).select().as_list()
 
     # initialize rows for model use
@@ -92,7 +92,8 @@ def index():
         prob_list.append(common.shape[0] / total)
 
     probability['prob'] = prob_list
-    probability = probability.sort_values(by=['prob'], ascending=False).drop_duplicates(subset=['disease'], keep='first').head(n=5)
+    probability = probability.sort_values(by=['prob'], ascending=False).drop_duplicates(
+        subset=['disease'], keep='first').head(n=5)
 
     form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
     form.structure.find('[type=submit]')[0]['_value'] = 'Add'
@@ -156,30 +157,52 @@ def search():
 def user_info(user_id=None):
     # db get user_info of get_user_email return that
     # assert test
-    rows = db(db.user_info.user_email == get_user_email()).select()
-    if rows is None:
-        redirect(URL('add_user_info', user_id))
+    # rows = db(db.user_info.user_email == get_user_email()).select()
+    # if rows is None:
+    #     redirect(URL('add_user_info', user_id))
+    user = db(db.user_info.user_email == get_user_email()).select().first()
+    if user is None:
+        redirect(URL("add_user_info"))
+    assert user is not None
     return dict(
-        rows=rows, url_signer=url_signer
+        # rows=rows,
+        url_signer=url_signer,
+        user=user,
     )
 
 
 @action('add_user_info', method=["GET", "POST"])
 @action.uses('add_user_info.html', url_signer, db, session, auth.user)
 def add_user_info():
-    form = Form(db.user_info, crsf_session=session, formstyle=FormStyleBulma)
+    form = Form([Field('First_Name', requires=IS_NOT_EMPTY(),),
+                 Field('Last_Name', requires=IS_NOT_EMPTY()),
+                 Field('Age', requires=IS_INT_IN_RANGE(0, 151)),
+                 Field('Sex', requires=IS_IN_SET(["M", "F"]))],
+                csrf_session=session,
+                formstyle=FormStyleBulma)
+
     if form.accepted:
+        db.user_info.insert(
+            first_name=form.vars["First_Name"],
+            last_name=form.vars['Last_Name'],
+            age=form.vars['Age'],
+            sex=form.vars['Sex'],)
         redirect(URL('user_info'))
+    # form = Form(db.user_info, crsf_session=session, formstyle=FormStyleBulma)
+    # if form.accepted:
+    #     redirect(URL('user_info'))
     return dict(form=form)
 
 
 @action('edit_user_info/<user_info_id:int>', method=["GET", "POST"])
 @action.uses('edit_user_info.html', url_signer.verify(), url_signer, db, session, auth.user)
-def edit_user_info(user_info_id=None):
+def edit_user_info(
+    user_info_id=None
+):
     assert user_info_id is not None
     user = db.user_info[user_info_id]
 
-    if user["user_email"] != get_user_email() or user is None:
+    if user is None or user["user_email"] != get_user_email():
         redirect(URL('user_info'))
 
     form = Form(db.user_info, record=user, deletable=False, csrf_session=session,
