@@ -23,8 +23,9 @@ let init = (app) => {
         return a;
     };
 
-    app.add_symptom = function() {
-        app.vue.symptom_list.push(app.vue.query);
+    app.add_symptom = function(symptom_name) {
+        console.log(symptom_name)
+        app.vue.symptom_list.push(symptom_name);
         app.vue.query = "";
         app.vue.results = [];
     }

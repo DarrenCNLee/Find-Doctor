@@ -45,17 +45,27 @@
                                                         
                             [[=form]]
 
-                            <div class="section" id="vue-target" v-cloak>
+                            <div id="vue-target" v-cloak>
                                 <div class="control block">
                                   <input class="input" type="text" v-model="query" @keyup="search" />
                                 </div>
                                 
-                                <div v-for="r in results">{{r}}</div>
-
-                                <button class="button is-primary" @click="add_symptom">Add</button>
-
+                                <table class="table is-striped is full-width">
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr v-for="r in results">
+                                            <th>{{r.symptom_name}}</th>
+                                            <td><button class="button is-primary" @click="add_symptom(r.symptom_name)">Add</button></td>
+                                        </tr>
+                                </table>
+                                
                                 <div v-for="s in symptom_list">{{s}}</div>
                             </div>
+
+                            <section>
+                            </section>
 
                             <h1 class="subtitle">Symptoms Listed:</h1>
                             <ul>

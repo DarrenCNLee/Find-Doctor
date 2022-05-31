@@ -38,6 +38,7 @@ import numpy as np
 import os
 import uuid
 import random
+import string
 
 url_signer = URLSigner(session)
 
@@ -111,10 +112,10 @@ def search():
     q = request.params.get("q").lower()
 
     # scuffed way of getting symptom list (in lower case)
-    rows = db(db.symptom.symptom_list).select().as_list()
+    rows = db(db.symptoms.symptom_name).select().as_list()
     symptoms = list()
     for row in rows:
-        symptoms.append(row['symptom_list'].lower())
+        symptoms.append(row['symptom_name'].lower())
     print("symptoms: " + str(symptoms))
 
     # check if the word starts with
@@ -128,14 +129,14 @@ def search():
                 if word.startswith(q):
                     autocomplete.append(symptom)
     print("autocomplete: " + str(autocomplete))
-    results = results = db(
-        (db.symptom.symptom_list == q) | (
-            db.symptom.symptom_list == q.capitalize())
+    results = db(
+        (db.symptoms.symptom_name == q) | (
+            db.symptoms.symptom_name == q.capitalize())
     ).select()
 
     for item in autocomplete:
         results |= db(
-            (db.symptom.symptom_list == item) | (db.symptom.symptom_list == item.capitalize())).select()
+            (db.symptoms.symptom_name == item) | (db.symptoms.symptom_name == string.capwords(item))).select()
 
     results = results.as_list()
 
