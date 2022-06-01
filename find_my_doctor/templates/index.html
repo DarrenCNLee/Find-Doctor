@@ -57,10 +57,18 @@
                                         </tr>
                                         <tr v-for="r in results">
                                             <th>{{r.symptom_name}}</th>
+                                            <!--
+                                                <div v-if="has_symptom(r.symptom)">
+                                                    <td><button class="button is-primary" @click="remove_symptom(r.symptom_name)"><Remove></button></td>
+                                                </div>
+                                                <div v-else>
+                                                    <td><button class="button is-primary" @click="add_symptom(r.symptom_name)">Add</button></td>
+                                                </div>
+                                                -->
                                             <td><button class="button is-primary" @click="add_symptom(r.symptom_name)">Add</button></td>
                                         </tr>
                                 </table>
-                                
+
                                 <div v-for="s in symptom_list">{{s}}</div>
                             </div>
 
@@ -210,6 +218,7 @@
 <!-- Loads the index-specific js for Vue -->
 <script>
   let search_url = "[[=XML(search_url)]]";
+  let update_symptom_url = "[[=XML(update_symptom_url)]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]

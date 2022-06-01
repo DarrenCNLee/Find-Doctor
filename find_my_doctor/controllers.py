@@ -144,9 +144,9 @@ def search():
     return dict(symptoms=symptoms, results=results)
 
 #add a given symptom to a user's symptom list. put something in has_symptom table?
-@action('add_symptom', method="POST")
+@action('update_symptom', method="POST")
 @action.uses(url_signer.verify(), db)
-def add_symptom():
+def update_symptom():
     #get the from symptom_table
     symptoms = request.json.get('symptoms')
     db.symptom.update_or_insert(
@@ -154,7 +154,7 @@ def add_symptom():
         (db.symptom.user_email == get_user_email()),
         symptom_list = symptoms,
     )
-    return "added symptom"
+    return "update symptom"
 
 # @action('add_symptom', method=["GET", "POST"])
 # @action.uses('add_symptom.html', url_signer, db, session, auth.user)

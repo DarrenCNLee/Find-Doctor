@@ -26,9 +26,20 @@ let init = (app) => {
     app.add_symptom = function(symptom_name) {
         //need to push and crap, plus add this to methods list
         app.vue.symptom_list.push(symptom_name);
-        axios.post(add_symptom_url, {symptoms: app.vue.symptom_list});
+        axios.post(update_symptom_url, {symptoms: app.vue.symptom_list});
         app.vue.query = "";
         app.vue.results = [];
+    }
+
+
+    //need to grab user's symptoms and put into symptom_list during init
+
+    app.remove_symptom = function(symptom_name) {
+        var index = symptom_list.indexOf(symptom_name);
+        if (index > -1) {
+            symptom_list.splice(index, 1);
+        }
+        axios.post(update_symptom_url, {symptoms: app.vue.symptom_list});
     }
 
     app.search = function () {
@@ -63,6 +74,7 @@ let init = (app) => {
         // Complete as you see fit.
         search: app.search,
         add_symptom: app.add_symptom,
+        remove_symptom: app.remove_symptom,
         set_stars: app.set_stars,
         stars_out: app.stars_out,
         stars_over: app.stars_over,
