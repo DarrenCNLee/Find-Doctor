@@ -103,7 +103,7 @@ def index():
         redirect(URL('index'))
 
     return dict(rows=rows, form=form, symptoms=symptom_list, url_signer=url_signer, disease=probability,
-                search_url=URL('search', signer=url_signer))
+                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer))
 
 
 @action('search')
@@ -142,6 +142,19 @@ def search():
 
     print(q, results)
     return dict(symptoms=symptoms, results=results)
+
+#add a given symptom to a user's symptom list. put something in has_symptom table?
+@action('add_symptom', method="POST")
+@action.uses(url_signer.verify(), db)
+def add_symptom():
+    #get the from symptom_table
+    symptoms = request.json.get('symptoms')
+    db.symptom.update_or_insert(
+        #trying to app or append symptom to the symptom list
+        (db.symptom.user_email == get_user_email()),
+        symptom_list = symptoms,
+    )
+    return "added symptom"
 
 # @action('add_symptom', method=["GET", "POST"])
 # @action.uses('add_symptom.html', url_signer, db, session, auth.user)

@@ -24,8 +24,9 @@ let init = (app) => {
     };
 
     app.add_symptom = function(symptom_name) {
-        console.log(symptom_name)
+        //need to push and crap, plus add this to methods list
         app.vue.symptom_list.push(symptom_name);
+        axios.post(add_symptom_url, {symptoms: app.vue.symptom_list});
         app.vue.query = "";
         app.vue.results = [];
     }
