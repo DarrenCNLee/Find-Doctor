@@ -45,22 +45,32 @@ url_signer = URLSigner(session)
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
 
-# assigns a symptom to a user within the "has_symptom" db, inputs are an entry from the "user_info" and "symptoms" db
+# initialize disease model
+class DiseaseModel():
+    def __init__(self, symptom_list, disease_list, probability):
+        self.symptom_list = symptom_list
+        self.disease_list = disease_list
+        self.probability = probability
+        self.rows = db(db.symptom.user_email == get_user_email()).select().as_list()
+        self.user_symptoms = []
+        self.prob_list = []
+    def predict(self):
+        symptom_list = self.symptom_list
+        if not self.user_symptoms:
+            for e in self.rows:
+                self.user_symptoms.append(e['symptom_list'])
+            self.user_symptoms = np.asarray(self.user_symptoms)
+        # model calculation for corresponding symptoms to diseases
+        for i, row in self.disease_list.iterrows():
+            total = row.count()
+            common = np.intersect1d(row.dropna().to_numpy(), self.user_symptoms)
+            self.prob_list.append(common.shape[0] / total)
 
-
-def has(u, s):
-    db.has_symptom.update_or_insert(
-        (
-            (db.has_symptom.user_id == u.id) &
-            (db.has_symptom.symptom_id == s.id)
-        ),
-        user_id=u.id,
-        symptom_id=s.id,
-    )
+        self.probability['prob'] = self.prob_list
+        self.probability = self.probability.sort_values(by=['prob'], ascending=False).drop_duplicates(
+            subset=['disease'], keep='first').head(n=5)
 
 # The auth.user below forces login.
-
-
 @action('index', method=["GET", "POST"])
 @action.uses('index.html', url_signer, db, auth.user)
 def index():
@@ -71,6 +81,8 @@ def index():
         for s in symptom_list:
             db.symptoms.insert(symptom_name=s)
 
+    rows = db(db.symptom.user_email == get_user_email()).select().as_list()
+
     # create disease list, each line has the disease name first then followed by all the symptoms
     # disease_list = np.genfromtxt(disease_file, delimiter=',', dtype=str)
     disease_list = pd.read_csv(disease_file, sep=",", lineterminator="\n")
@@ -78,23 +90,9 @@ def index():
     probability = pd.DataFrame(columns=["disease", "prob"])
     probability['disease'] = disease_list["Disease"]
 
-    rows = db(db.symptom.user_email == get_user_email()).select().as_list()
-
-    # initialize rows for model use
-    user_symptoms = []
-    prob_list = []
-    for e in rows:
-        user_symptoms.append(e['symptom_list'])
-    user_symptoms = np.asarray(user_symptoms)
-    # model calculation for corresponding symptoms to diseases
-    for i, row in disease_list.iterrows():
-        total = row.count()
-        common = np.intersect1d(row.dropna().to_numpy(), user_symptoms)
-        prob_list.append(common.shape[0] / total)
-
-    probability['prob'] = prob_list
-    probability = probability.sort_values(by=['prob'], ascending=False).drop_duplicates(
-        subset=['disease'], keep='first').head(n=5)
+    #initialize disease model and predict with the current symptom list
+    disease_model = DiseaseModel(symptom_list, disease_list, probability)
+    disease_model.predict()
 
     form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
     form.structure.find('[type=submit]')[0]['_value'] = 'Add'
@@ -102,8 +100,8 @@ def index():
     if form.accepted:
         redirect(URL('index'))
 
-    return dict(rows=rows, form=form, symptoms=symptom_list, url_signer=url_signer, disease=probability,
-                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer))
+    return dict(rows=rows, form=form, symptoms=disease_model.symptom_list, url_signer=url_signer, disease=disease_model.probability,
+                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer),update_symptom_url=URL('update_symptom', signer=url_signer))
 
 
 @action('search')
