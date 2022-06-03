@@ -29,7 +29,7 @@ from py4web import action, request, abort, redirect, URL, Field
 from yatl.helpers import A
 from py4web.utils.form import Form, FormStyleBulma
 from py4web.utils.url_signer import URLSigner
-from .models import get_user_email
+from .models import get_user_email, get_first_name, get_last_name
 from pydal.validators import *
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash, signed_url, Field
 from .settings import APP_FOLDER
@@ -47,13 +47,21 @@ disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
 
 # initialize disease model
 class DiseaseModel():
-    def __init__(self, symptom_list, disease_list, probability):
+    def __init__(self, symptom_list):
         self.symptom_list = symptom_list
-        self.disease_list = disease_list
-        self.probability = probability
+        self.disease_list = []
+        self.probability = []
         self.rows = db(db.symptom.user_email == get_user_email()).select().as_list()
         self.user_symptoms = []
         self.prob_list = []
+
+        # create disease list, each line has the disease name first then followed by all the symptoms
+        # disease_list = np.genfromtxt(disease_file, delimiter=',', dtype=str)
+        self.disease_list = pd.read_csv(disease_file, sep=",", lineterminator="\n")
+        # create empty probability for our regression model
+        self.probability = pd.DataFrame(columns=["disease", "prob"])
+        self.probability['disease'] = self.disease_list["Disease"]
+        
     def predict(self):
         symptom_list = self.symptom_list
         if not self.user_symptoms:
@@ -83,15 +91,8 @@ def index():
 
     rows = db(db.symptom.user_email == get_user_email()).select().as_list()
 
-    # create disease list, each line has the disease name first then followed by all the symptoms
-    # disease_list = np.genfromtxt(disease_file, delimiter=',', dtype=str)
-    disease_list = pd.read_csv(disease_file, sep=",", lineterminator="\n")
-    # create empty probability for our regression model
-    probability = pd.DataFrame(columns=["disease", "prob"])
-    probability['disease'] = disease_list["Disease"]
-
     #initialize disease model and predict with the current symptom list
-    disease_model = DiseaseModel(symptom_list, disease_list, probability)
+    disease_model = DiseaseModel(symptom_list)
     disease_model.predict()
 
     form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
@@ -186,8 +187,8 @@ def user_info(user_id=None):
 @action('add_user_info', method=["GET", "POST"])
 @action.uses('add_user_info.html', url_signer, db, session, auth.user)
 def add_user_info():
-    form = Form([Field('First_Name', requires=IS_NOT_EMPTY(),),
-                 Field('Last_Name', requires=IS_NOT_EMPTY()),
+    form = Form([Field('First_Name', requires=IS_NOT_EMPTY(), default=get_first_name),
+                 Field('Last_Name', requires=IS_NOT_EMPTY(), default=get_last_name),
                  Field('Age', requires=IS_INT_IN_RANGE(0, 151)),
                  Field('Sex', requires=IS_IN_SET(["M", "F"]))],
                 csrf_session=session,

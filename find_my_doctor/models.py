@@ -16,6 +16,12 @@ def get_user_email():
 def get_user():
     return auth.current_user.get("id") if auth.current_user else None
 
+def get_first_name():
+    return auth.current_user.get('first_name') if auth.current_user else None
+
+def get_last_name():
+    return auth.current_user.get('last_name') if auth.current_user else None
+
 
 ### Define your table below
 #
@@ -28,8 +34,8 @@ def get_user():
 
 db.define_table(
     'user_info',
-    Field('first_name', requires=IS_NOT_EMPTY()),
-    Field('last_name', requires=IS_NOT_EMPTY()),
+    Field('first_name', requires=IS_NOT_EMPTY(), default=get_first_name),
+    Field('last_name', requires=IS_NOT_EMPTY(), default=get_last_name),
     Field('age', requires=IS_INT_IN_RANGE(0, 151)),
     Field('sex', requires=IS_IN_SET(["M", "F"])),
     # Field('location', requires=IS_NOT_EMPTY()),
@@ -50,24 +56,11 @@ db.define_table(
 )
 
 db.define_table(
-    'has_symptom',
-    Field('user_id', 'reference user_info'),
-    Field('symptom_id', 'reference symptoms'),
-)
-
-db.define_table(
-    'schedule',
-    Field('working_days', requires=IS_IN_SET(["Mon", "Tue", "Wed", "Thur", "Fri"])),
-    Field('booked_days', requires=IS_IN_SET(["Mon", "Tue", "Wed", "Thur", "Fri"])),
-    Field('open_days', requires=IS_IN_SET(["Mon", "Tue", "Wed", "Thur", "Fri"])),
-)
-
-db.define_table(
     'doctor',
     Field('name', requires=IS_NOT_EMPTY()),
-    Field('location', requires=IS_NOT_EMPTY()),
-    Field('schedule_id', 'reference schedule'),
-    Field('insurance_provider', requires=IS_NOT_EMPTY()),
+    # Field('location', requires=IS_NOT_EMPTY()),
+    # Field('schedule_id', 'reference schedule'),
+    # Field('insurance_provider', requires=IS_NOT_EMPTY()),
     Field('doctor_type', requires=IS_NOT_EMPTY()),
 )
 
@@ -84,8 +77,6 @@ db.define_table(
 db.user_info.id.readable = db.user_info.id.writable = False
 db.user_info.user_email.readable = db.user_info.user_email.writable = False
 db.symptom.user_email.readable = db.symptom.user_email.writable = False
-
-db.schedule.id.readable = db.schedule.id.writable = False
 db.doctor.id.readable = db.doctor.id.writable = False
 db.review.id.readable = db.review.id.writable = False
 
