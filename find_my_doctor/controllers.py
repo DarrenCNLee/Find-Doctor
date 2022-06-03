@@ -167,7 +167,7 @@ def index():
             i+=1
 
     return dict(rows=rows, form=form, symptoms=disease_model.symptom_list, url_signer=url_signer, disease=disease_model.probability,
-                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer), update_symptom_url=URL('update_symptom', signer=url_signer))
+                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer), update_symptom_url=URL('update_symptom', signer=url_signer), get_rating_url = URL('get_rating', signer=url_signer))
 
 
 @action('search')
@@ -296,7 +296,7 @@ def edit_user_info(
 
 
 @action("get_rating")
-@action.uses(db, auth.user)
+@action.uses('get_rating.html', db, auth.user)
 def get_rating():
     doctor_id = request.params.get("doctor_id")
     rating = request.json.get("star_rating")
