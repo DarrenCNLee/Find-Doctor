@@ -13,21 +13,24 @@ symptom_list = (line.strip() for line in open(symptom_list_file))
 def get_user_email():
     return auth.current_user.get('email') if auth.current_user else None
 
+
 def get_user():
     return auth.current_user.get("id") if auth.current_user else None
 
+
 def get_first_name():
     return auth.current_user.get('first_name') if auth.current_user else None
+
 
 def get_last_name():
     return auth.current_user.get('last_name') if auth.current_user else None
 
 
-### Define your table below
+# Define your table below
 #
 # db.define_table('thing', Field('name'))
 #
-## always commit your models to avoid problems later
+# always commit your models to avoid problems later
 #
 # db.commit()
 #
@@ -45,7 +48,8 @@ db.define_table(
 
 db.define_table(
     'symptom',
-    Field('symptom_list', requires=IS_IN_SET(symptom_list, zero=T('choose one'), error_message='must select from the list')),
+    Field('symptom_list', requires=IS_IN_SET(symptom_list, zero=T(
+        'choose one'), error_message='must select from the list')),
     # Field('severity', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )

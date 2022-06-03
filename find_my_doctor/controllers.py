@@ -45,23 +45,79 @@ url_signer = URLSigner(session)
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
 
+specialist_list = ["Dermatologist", "Allergist", "Gastroenterologist", "General Physician", "Endocrinologist", "Pulmonologist", "Neurologist",
+                   "Nephrologist", "Orthopedist", "Hepatologist", "Pulmonologist", "Otolaryngologist", "Cardiologist", "Phlebologist", "Rheumatologist", "Urologist"]
+
+doctor_names = ["Victoria Ahmad",
+                "Andrea Alkyone",
+                "Kamila Ryan",
+                "Burhan Dejesus",
+                "Georgia Puckett",
+                "Keisha Bourne",
+                "Caleb Grainger",
+                "Piper Jeffery",
+                "Amber Andersen",
+                "Kanye Melia",
+                "Otto Lee",
+                "Finnlay Mcclure",
+                "Astrid Krause",
+                "Louie Freeman",
+                "Gwen Cochran",
+                "Emilie Rodrigues",
+                "Elsa Morley",
+                "Abu Murillo",
+                "Stella Wainwright",
+                "Ayyan Thatcher",
+                "Aisling Hodge",
+                "Maciej Mckay",
+                "Ziva Wallace",
+                "Oliwier Akhtar",
+                "Jarred Mcneill",
+                "David Mueller",
+                "Reem Hall",
+                "Ronnie Cruz",
+                "Santino Hirst",
+                "Nasir Reader",
+                "Safwan Houston",
+                "Abigayle Church",
+                "Aeryn Hirst",
+                "Campbell Espinosa",
+                "Alana Hale",
+                "Ian Shea",
+                "Kiana Bateman",
+                "Isabel Lyons",
+                "Yasmin Thorpe",
+                "Jakub Almond",
+                "Antoni Lutz",
+                "Jazmin Cresswell",
+                "Kelsea English",
+                "Faith Hoffman",
+                "Robin Cain",
+                "Momina Paterson",
+                "Eduard Rich",
+                "Ralphy Hinton",
+                ]
+
+
 # initialize disease model
 class DiseaseModel():
     def __init__(self, symptom_list):
         self.symptom_list = symptom_list
         self.disease_list = []
         self.probability = []
-        self.rows = db(db.symptom.user_email == get_user_email()).select().as_list()
+        self.rows = db(db.symptom.user_email ==
+                       get_user_email()).select().as_list()
         self.user_symptoms = []
         self.prob_list = []
 
         # create disease list, each line has the disease name first then followed by all the symptoms
         # disease_list = np.genfromtxt(disease_file, delimiter=',', dtype=str)
-        self.disease_list = pd.read_csv(disease_file, sep=",", lineterminator="\n")
+        self.disease_list = pd.read_csv(
+            disease_file, sep=",", lineterminator="\n")
         # create empty probability for our regression model
         self.probability = pd.DataFrame(columns=["disease", "prob"])
         self.probability['disease'] = self.disease_list["Disease"]
-        
+
     def predict(self):
         symptom_list = self.symptom_list
         if not self.user_symptoms:
@@ -71,7 +127,8 @@ class DiseaseModel():
         # model calculation for corresponding symptoms to diseases
         for i, row in self.disease_list.iterrows():
             total = row.count()
-            common = np.intersect1d(row.dropna().to_numpy(), self.user_symptoms)
+            common = np.intersect1d(
+                row.dropna().to_numpy(), self.user_symptoms)
             self.prob_list.append(common.shape[0] / total)
 
         self.probability['prob'] = self.prob_list
@@ -79,6 +136,8 @@ class DiseaseModel():
             subset=['disease'], keep='first').head(n=5)
 
 # The auth.user below forces login.
+
+
 @action('index', method=["GET", "POST"])
 @action.uses('index.html', url_signer, db, auth.user)
 def index():
@@ -91,7 +150,7 @@ def index():
 
     rows = db(db.symptom.user_email == get_user_email()).select().as_list()
 
-    #initialize disease model and predict with the current symptom list
+    # initialize disease model and predict with the current symptom list
     disease_model = DiseaseModel(symptom_list)
     disease_model.predict()
 
@@ -101,8 +160,14 @@ def index():
     if form.accepted:
         redirect(URL('index'))
 
+    i=0
+    for specialist in specialist_list: 
+        for _ in range(3): 
+            db.doctor.update_or_insert(name=doctor_names[i],doctor_type=specialist)
+            i+=1
+
     return dict(rows=rows, form=form, symptoms=disease_model.symptom_list, url_signer=url_signer, disease=disease_model.probability,
-                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer),update_symptom_url=URL('update_symptom', signer=url_signer))
+                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer), update_symptom_url=URL('update_symptom', signer=url_signer))
 
 
 @action('search')
@@ -142,16 +207,18 @@ def search():
     print(q, results)
     return dict(symptoms=symptoms, results=results)
 
-#add a given symptom to a user's symptom list. put something in has_symptom table?
+# add a given symptom to a user's symptom list. put something in has_symptom table?
+
+
 @action('update_symptom', method="POST")
 @action.uses(url_signer.verify(), db)
 def update_symptom():
-    #get the from symptom_table
+    # get the from symptom_table
     symptoms = request.json.get('symptoms')
     db.symptom.update_or_insert(
-        #trying to app or append symptom to the symptom list
+        # trying to app or append symptom to the symptom list
         (db.symptom.user_email == get_user_email()),
-        symptom_list = symptoms,
+        symptom_list=symptoms,
     )
     return "update symptom"
 
@@ -188,7 +255,8 @@ def user_info(user_id=None):
 @action.uses('add_user_info.html', url_signer, db, session, auth.user)
 def add_user_info():
     form = Form([Field('First_Name', requires=IS_NOT_EMPTY(), default=get_first_name),
-                 Field('Last_Name', requires=IS_NOT_EMPTY(), default=get_last_name),
+                 Field('Last_Name', requires=IS_NOT_EMPTY(),
+                       default=get_last_name),
                  Field('Age', requires=IS_INT_IN_RANGE(0, 151)),
                  Field('Sex', requires=IS_IN_SET(["M", "F"]))],
                 csrf_session=session,
