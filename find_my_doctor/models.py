@@ -41,8 +41,6 @@ db.define_table(
     Field('last_name', requires=IS_NOT_EMPTY(), default=get_last_name),
     Field('age', requires=IS_INT_IN_RANGE(0, 151)),
     Field('sex', requires=IS_IN_SET(["M", "F"])),
-    # Field('location', requires=IS_NOT_EMPTY()),
-    # Field('insurance_provider', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )
 
@@ -50,7 +48,6 @@ db.define_table(
     'symptom',
     Field('symptom_list', requires=IS_IN_SET(symptom_list, zero=T(
         'choose one'), error_message='must select from the list')),
-    # Field('severity', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )
 
@@ -60,27 +57,30 @@ db.define_table(
 )
 
 db.define_table(
+    'diseases',
+    Field('disease_name', requires=IS_NOT_EMPTY()),
+)
+
+db.define_table(
     'doctor',
     Field('name', requires=IS_NOT_EMPTY()),
-    # Field('location', requires=IS_NOT_EMPTY()),
-    # Field('schedule_id', 'reference schedule'),
-    # Field('insurance_provider', requires=IS_NOT_EMPTY()),
     Field('doctor_type', requires=IS_NOT_EMPTY()),
 )
 
 db.define_table(
     'review',
-    Field('doctor_id', 'reference doctor'),
-    Field('star_rating', requires=IS_FLOAT_IN_RANGE(0, 5)),
+    Field('doctor_info', 'reference doctor'),
+    Field('star_rating', requires=IS_FLOAT_IN_RANGE(0, 5), default=0),
     Field('review_message'),
-    Field('user_id', 'reference user_info'),
-    Field("rater", "reference auth_user", default=get_user)
+    Field('name', requires=IS_NOT_EMPTY()),
+    Field('user_info', 'reference user_info')
 )
 
 
 db.user_info.id.readable = db.user_info.id.writable = False
 db.user_info.user_email.readable = db.user_info.user_email.writable = False
 db.symptom.user_email.readable = db.symptom.user_email.writable = False
+db.symptoms.id.writable = False
 db.doctor.id.readable = db.doctor.id.writable = False
 db.review.id.readable = db.review.id.writable = False
 

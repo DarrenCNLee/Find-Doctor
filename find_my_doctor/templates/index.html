@@ -37,19 +37,23 @@
                             <a class="button is-link is-fullwidth" href="[[=URL('user_info')]]">
                                 User Info
                             </a>
+                            <br>
+                            <a class ="button is-link is-fullwidth" href="[[=URL('doctors')]]">
+                                Doctors
+                            </a>
                             <!-- </button> -->
                         </div>
                         <div class="column is-one-third">
-                            
+
                             <label class="label">Find a doctor near you</label>
-                                                        
+
                             [[=form]]
 
                             <div id="vue-target" v-cloak>
                                 <div class="control block">
                                   <input class="input" type="text" v-model="query" @keyup="search" />
                                 </div>
-                                
+
                                 <table class="table is-striped is full-width">
                                         <tr>
                                             <th></th>
@@ -87,7 +91,7 @@
                         <div class="column">
 
                             <div class="field">
-                                
+
                                 <br>
 
                                 <div class="column is-one-third">
@@ -109,7 +113,7 @@
                                         </span>
                                     </button>
                                 </div>
-                                
+
                                 <div class="dropdown-menu" id="dropdown-menu" role="menu">
                                     <div class="dropdown-content">
                                         [[#for sympt in symptoms:]]
@@ -140,73 +144,12 @@
                                                 <input type="checkbox">
 
                                             </label>
-                                        </a> 
+                                        </a>
 
                                     </div>
                                 </div>
                             </div> -->
                                 </div>
-            </section>
-
-            <section class="section">
-                <div class="container">
-                    <div class="columns is-mobile is-centered">
-                        <div class="column is-half">
-                            <div class="content">
-                                <p class="is-size-3">
-                                    Gastronomist
-                                </p>
-                                <ul>
-                                    <li>Santa Cruz Gastroenterology</li>
-                                    <ul>
-                                        <li> 2.8 ⭐</li>
-                                        <li> Distance: 2.8 miles</li>
-                                        <li> Schedule appointment</li>
-                                    </ul>
-
-                                    <li> Kourosh Ghassemi, M.D.</li>
-                                    <ul>
-                                        <li> 2.6 ⭐</li>
-                                        <li> Distance: 6.1 miles</li>
-                                        <li> Schedule appointment</li>
-                                        <li> Schedule appointment</li>
-                                    </ul>
-                                </ul>
-                                <p class="is-size-3">
-                                    Psychiatrist
-                                </p>
-                                <ul>
-                                    <li>The Sutfliffe Clinic</li>
-                                </ul>
-
-                            </div>
-                        </div>
-                        <div class="column is-one-fifth">
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <br>
-                            <div class="box has-text-centered">
-                                <br>
-                                <br>
-                                <br>
-
-                                Map placeholder
-                                <br>
-                                <br>
-                                <br>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </section>
         </div>
     </div>

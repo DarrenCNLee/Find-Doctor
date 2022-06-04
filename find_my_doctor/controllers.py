@@ -144,9 +144,8 @@ def index():
 
     # create symptoms db once
     symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
-    if db(db.symptoms).isempty():
-        for s in symptom_list:
-            db.symptoms.insert(symptom_name=s)
+    for s in symptom_list:
+        db.symptoms.update_or_insert(symptom_name=s)
 
     rows = db(db.symptom.user_email == get_user_email()).select().as_list()
 
@@ -294,17 +293,36 @@ def edit_user_info(
 
     return dict(form=form)
 
-
-@action("get_rating")
-@action.uses('get_rating.html', db, auth.user)
-def get_rating():
-    doctor_id = request.params.get("doctor_id")
-    rating = request.json.get("star_rating")
-    assert doctor_id is not None and rating is not None
-    db.stars.update_or_insert(
-        ((db.review.doctor_id == doctor_id) &
-         (db.review.rater == get_user_email())),
-        doctor_id=doctor_id,
-        rater=get_user_email(),
-        star_rating=rating
+@action("doctors")
+@action.uses('doctors.html', url_signer, db, session, auth.user)
+def doctors():
+    return dict(
+        load_reviews_url = URL('load_reviews', signer=url_signer),
+        add_review_url = URL('add_review', signer=url_signer),
+        delete_review_url = URL('delete_review', signer=url_signer),
     )
+
+@action('load_reviews')
+@action.uses(db, url_signer.verify())
+def load_reviews():
+    current_user_email = get_user_email()
+    doctor_rows = db(db.doctor).select().as_list()
+    review_rows = db(db.review).select().as_list()
+    user_rows = db(db.user_info).select().as_list()
+    r = db(db.user_info.user_email == get_user_email()).select().first()
+    name = r.first_name + " " + r.last_name if r is not None else "Unknown"
+    return dict(doctor_rows=doctor_rows, review_rows=review_rows, user_rows=user_rows, name=name, current_user_email=current_user_email)
+
+@action('add_review', method="POST")
+@action.uses(db, url_signer.verify())
+def add_review():
+    r = db(db.user_info.user_email == get_user_email()).select().first()
+    name = r.first_name + " " + r.last_name if r is not None else "Unknown"
+    doctor_reference = db(db.doctor.id == request.json.get('doctor_id')).select().first()
+    review_id = db.review.insert(
+        doctor_id=request.json.get('doctor_id'),
+        star_rating=request.json.get('star_rating'),
+        review_message=request.json.get('review_message'),
+        name=name,
+    )
+    return dict(id=review_id, user_id=r.id, name=name)

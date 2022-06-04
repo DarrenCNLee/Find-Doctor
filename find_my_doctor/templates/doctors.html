@@ -1,0 +1,91 @@
+[[extend 'layout.html']]
+
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
+
+<div class="section" id="vue-target" v-cloak>
+
+    <!-- Title at top of page and add post button. -->
+    <div class="container block">
+        <h1 class="title">Doctors</h1>
+        <a class="button is-link" href="[[=URL('index')]]">
+            Go Back
+        </a>
+    </div>
+
+    <div class="container block">
+        <!-- For loop for each doctor -->
+        <div v-for="doctor in doctors.slice()">
+            <div class="box has-background-light">
+                <!-- Each doctor's name and doctor type -->
+                <div class="has-text-black has-text-weight-medium">{{doctor.name}}</div>
+                <div class="has-text-grey">{{doctor.doctor_type}}</div>
+                <!-- Each doctor will have there own add review button -->
+                <p class="mb-2"></p>
+                <div v-if="!add_mode">
+                    <button @click="set_add_status(true, doctor._idx)" class="button is-primary">
+                        <i class="fa fa-plus fa-fw"></i>
+                    </button>
+                </div>
+
+                <!-- Review form only shows if add_mode is true and if the current doctor's id matches -->
+                <div v-if="add_mode && current_doctor_id == doctor._idx" class="container block">
+                    <div class="form">
+                        <div class="field">
+                            <div class="control">
+                                <input type="text" v-model="add_review_message" class="input" placeholder="Enter your review here">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div>Star Rating: {{add_review_rating}}</div>
+                            <div class="control">
+                                <input type="radio" id="one" value="1" v-model="add_review_rating">
+                                <input type="radio" id="two" value="2" v-model="add_review_rating">
+                                <input type="radio" id="three" value="3" v-model="add_review_rating">
+                                <input type="radio" id="four" value="4" v-model="add_review_rating">
+                                <input type="radio" id="five" value="5" v-model="add_review_rating">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <input type="submit" @click="add_review" value="Post Review" class="button is-primary">
+                                <input type="submit" @click="set_add_status(false)" value="Cancel" class="button is-warning">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="mb-2"></p>
+                <!-- Shows the reviews for each doctor -->
+                <div class="container block">
+                    <div v-if="!reviews.length">No reviews</div>
+                    <div v-for="review in reviews.slice().reverse()">
+                        <div v-if="review.doctor_id == doctor._idx">
+                            <div class="has-text-black">{{review.review_message}}</div>
+                            <span v-for="star_idx in [1, 2, 3, 4, 5]">
+                                <i v-if="star_idx <= review.star_rating" class="fa fa-star"></i>
+                                <i v-if="star_idx > review.star_rating" class="fa fa-star-o"></i>
+                            </span>
+                            <div class="has-text-grey">Reviewed by {{review.name}}</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+        </div>
+    </div>
+
+</div>
+
+
+[[block page_scripts]]
+<script>
+    let load_reviews_url = "[[=XML(load_reviews_url)]]";
+    let add_review_url = "[[=XML(add_review_url)]]";
+    let delete_review_url = "[[=XML(delete_review_url)]]";
+</script>
+<script src="js/doctors.js"></script>
+[[end]]

@@ -1,4 +1,4 @@
-timestamp: 2022-05-19T17:58:23.620896
+timestamp: 2022-06-04T03:53:22.183604
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "email" CHAR(512) UNIQUE,
@@ -11,74 +11,56 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2022-05-19T17:58:23.667025
+timestamp: 2022-06-04T03:53:22.193558
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "tagpath" CHAR(512),
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2022-05-19T17:58:23.675953
+timestamp: 2022-06-04T03:53:22.200006
 CREATE TABLE "user_info"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "age" CHAR(512),
-    "sex" CHAR(512),
     "first_name" CHAR(512),
     "last_name" CHAR(512),
+    "age" CHAR(512),
+    "sex" CHAR(512),
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2022-05-19T17:58:23.721584
+timestamp: 2022-06-04T03:53:22.205958
 CREATE TABLE "symptom"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "symptom_list" CHAR(512),
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2022-05-19T17:58:23.728528
+timestamp: 2022-06-04T03:53:22.211414
 CREATE TABLE "symptoms"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "symptom_name" CHAR(512)
 );
 success!
-timestamp: 2022-05-19T17:58:23.734480
-CREATE TABLE "has_symptom"(
+timestamp: 2022-06-04T03:53:22.217366
+CREATE TABLE "diseases"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  ,
-    "symptom_id" INTEGER REFERENCES "symptoms" ("id") ON DELETE CASCADE  
+    "disease_name" CHAR(512)
 );
 success!
-timestamp: 2022-05-19T17:58:23.740928
-CREATE TABLE "schedule"(
-    "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "working_days" CHAR(512),
-    "booked_days" CHAR(512),
-    "open_days" CHAR(512)
-);
-success!
-timestamp: 2022-05-19T17:58:23.749360
+timestamp: 2022-06-04T03:53:22.222326
 CREATE TABLE "doctor"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" CHAR(512),
-    "location" CHAR(512),
-    "schedule_id" INTEGER REFERENCES "schedule" ("id") ON DELETE CASCADE  ,
-    "insurance_provider" CHAR(512),
     "doctor_type" CHAR(512)
 );
 success!
-timestamp: 2022-05-19T17:58:23.756801
+timestamp: 2022-06-04T03:53:22.227286
 CREATE TABLE "review"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "doctor_id" INTEGER REFERENCES "doctor" ("id") ON DELETE CASCADE  ,
+    "doctor_info" INTEGER REFERENCES "doctor" ("id") ON DELETE CASCADE  ,
     "star_rating" CHAR(512),
     "review_message" CHAR(512),
-    "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  ,
-    "rater" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
+    "name" CHAR(512),
+    "user_info" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  
 );
-success!
-success!
-success!
-success!
-success!
-success!
 success!
