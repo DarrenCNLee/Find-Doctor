@@ -22,7 +22,19 @@
 
         </div>
     </section>
-
+    <nav class="level">
+        <div class="level-item has-text-centered">
+            <a class="button is-link" href="[[=URL('user_info')]]">
+                User Info
+            </a>
+        </div>
+        
+        <div class="level-item has-text-centered">
+            <a class ="button is-link" href="[[=URL('doctors')]]">
+                Doctors
+            </a>
+        </div>
+    </nav>
     <div class="columns is-mobile is-centered">
 
         <div class="column">
@@ -30,20 +42,7 @@
             <section class="section">
                 <div class="container">
                     <div class="columns is-mobile is-centered">
-                        <div class="column is-one-third">
-                            <br>
-                            <!-- <button class="button is-link is-fullwidth"> -->
-                            <!-- <a class="button is-link is-fullwidth" href="[[=URL('redirect_to_user_info')]]"> -->
-                            <a class="button is-link is-fullwidth" href="[[=URL('user_info')]]">
-                                User Info
-                            </a>
-                            <br>
-                            <a class ="button is-link is-fullwidth" href="[[=URL('doctors')]]">
-                                Doctors
-                            </a>
-                            <!-- </button> -->
-                        </div>
-                        <div class="column is-one-third">
+                        <div class="column is-half is-centered">
 
                             <label class="label">Find a doctor near you</label>
 
@@ -94,7 +93,7 @@
 
                                 <br>
 
-                                <div class="column is-one-third">
+                                <div class="column is-half is-centered">
 
                                     <ul>
                                         [[=disease.shape]]
