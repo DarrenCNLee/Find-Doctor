@@ -12,6 +12,11 @@
         }
     </style>
 </head>
+<style>
+    [v-cloak] {
+        display: none;
+    }
+</style>
 
 <body>
     <section class="hero is-primary">
@@ -57,6 +62,7 @@
                             </tr>
                             <tr v-for="r in results">
                                 <th>{{r}}</th>
+
                                 <!--
                                                 <div v-if="has_symptom(r.symptom)">
                                                     <td><button class="button is-primary" @click="remove_symptom(r)"><Remove></button></td>
@@ -69,31 +75,30 @@
                                 </td>
                             </tr>
                         </table>
-
-                        <div v-for="s in symptom_list">{{s}}</div>
-                    </div>
-
-                    <section>
-                    </section>
-
-                    <h1 class="subtitle">Symptoms Listed:</h1>
-                    <ul>
-                        [[for row in rows:]]
-                        <div class="box p-2 m-1">
-                            [[=row["symptom_list"]]]
-                            <!-- <a class="button is-danger" href="[[=URL('delete_symptom', row['symptom_list'], signer=url_signer)]]">
-                                <span class="icon"><i class="fa fa-fw fa-trash"></i></span>
-                              </a> -->
+                        <h1 class="subtitle">Symptoms Listed:</h1>
+                        <div v-for="s in symptom_list" class="box">
+                            {{s['symptom_name']}}
+                            <button @click="remove_symptom(s['symptom_name'])" class="button is-danger is-inverted">
+                                <i class="fa fa-trash"></i>
+                              </button>
                         </div>
-                        [[pass]]
-                    </ul>
+                    </div>
 
                 </div>
 
                 <div class="column is-half is-centered">
+                    <div class="subtitle">Possible health concerns</div>
                     [[for i, row in disease.iterrows():]]
-                    <li>[[=row["disease"]]] : [[=row["prob"]]]
-                    </li>
+                    <div class="box">
+                    <p>[[=row["disease"]]] : [[=row["prob"]]]</p>
+                    <p>Recommended doctor: [[=row["specialist"]]]</p>
+                        <a class="button is-success" href="https://www.google.com/search?q=[[=row["specialist"]]]+near+me" target="_blank" rel="noopener noreferrer">
+                            <i class="fa fa-google">
+                                Search [[=row["specialist"]]]s in your area
+                            </i>
+                        </a>
+                    
+                    </div>
                     [[pass]]
 
 
@@ -109,6 +114,8 @@
 <script>
     let search_url = "[[=XML(search_url)]]";
     let update_symptom_url = "[[=XML(update_symptom_url)]]";
+    let delete_symptom_url = "[[=XML(delete_symptom_url)]]";
+    let load_symptoms_url = "[[=XML(load_symptoms_url)]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]

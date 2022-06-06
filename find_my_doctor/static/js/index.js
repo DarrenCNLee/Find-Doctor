@@ -23,10 +23,11 @@ let init = (app) => {
         return a;
     };
 
-    app.add_symptom = function(symptom_name) {
+    app.add_symptom = function (symptom_name) {
         //need to push and crap, plus add this to methods list
         app.vue.symptom_list.push(symptom_name);
-        axios.post(update_symptom_url, {symptoms: app.vue.symptom_list});
+        axios.post(update_symptom_url, { symptom_name: symptom_name});
+        app.enumerate(app.vue.symptom_list);
         app.vue.query = "";
         app.vue.results = [];
     }
@@ -34,12 +35,11 @@ let init = (app) => {
 
     //need to grab user's symptoms and put into symptom_list during init
 
-    app.remove_symptom = function(symptom_name) {
-        var index = symptom_list.indexOf(symptom_name);
-        if (index > -1) {
-            symptom_list.splice(index, 1);
-        }
-        axios.post(update_symptom_url, {symptoms: app.vue.symptom_list});
+    app.remove_symptom = function (symptom_name) {
+        var index = app.vue.symptom_list.indexOf(symptom_name);
+            app.vue.symptom_list.splice(index, 1);
+            app.enumerate(app.vue.symptom_list);
+        axios.post(delete_symptom_url, { symptom: symptom_name });
     }
 
     app.search = function () {
@@ -91,6 +91,10 @@ let init = (app) => {
     app.init = () => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
+
+        axios.get(load_symptoms_url).then(function (response) {
+            app.vue.symptom_list = app.enumerate(response.data.symptom_list);
+        });
 
         axios.get(get_doctors_url)
             .then((result) => {

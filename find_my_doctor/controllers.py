@@ -44,10 +44,19 @@ url_signer = URLSigner(session)
 
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
+specialist_dataset_file = os.path.join(APP_FOLDER, "data", "disease-doctor.csv")
+
 symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
-    
-specialist_list = ["Dermatologist", "Allergist", "Gastroenterologist", "General Physician", "Endocrinologist", "Pulmonologist", "Neurologist",
-                   "Nephrologist", "Orthopedist", "Hepatologist", "Pulmonologist", "Otolaryngologist", "Cardiologist", "Phlebologist", "Rheumatologist", "Urologist"]
+diseases = pd.read_csv(disease_file, sep=",", lineterminator="\n")
+specialist_df = pd.read_csv(specialist_dataset_file, header=0, sep=",")
+
+# print(diseases.columns)
+
+specialist_list = specialist_df['specialist'].unique().tolist() 
+
+
+# specialist_list = ["Dermatologist", "Allergist", "Gastroenterologist", "General Physician", "Endocrinologist", "Pulmonologist", "Neurologist",
+#                    "Nephrologist", "Orthopedist", "Hepatologist", "Pulmonologist", "Otolaryngologist", "Cardiologist", "Phlebologist", "Rheumatologist", "Urologist"]
 
 doctor_names = ["Victoria Ahmad",
                 "Andrea Alkyone",
@@ -113,17 +122,18 @@ class DiseaseModel():
 
         # create disease list, each line has the disease name first then followed by all the symptoms
         # disease_list = np.genfromtxt(disease_file, delimiter=',', dtype=str)
-        self.disease_list = pd.read_csv(
-            disease_file, sep=",", lineterminator="\n")
+        self.disease_list = diseases
         # create empty probability for our regression model
         self.probability = pd.DataFrame(columns=["disease", "prob"])
         self.probability['disease'] = self.disease_list["Disease"]
-
+        self.probability = pd.merge(self.probability, specialist_df, how="left")
+        print(self.probability)
+        
     def predict(self):
         symptom_list = self.symptom_list
         if not self.user_symptoms:
             for e in self.rows:
-                self.user_symptoms.append(e['symptom_list'])
+                self.user_symptoms.append(e['symptom_name'])
             self.user_symptoms = np.asarray(self.user_symptoms)
         # model calculation for corresponding symptoms to diseases
         for i, row in self.disease_list.iterrows():
@@ -145,10 +155,10 @@ def index():
 
     # create symptoms db once
     # symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
-    for s in symptom_list:
-        db.symptoms.update_or_insert(symptom_name=s)
+    # for s in symptom_list:
+    #     db.symptoms.update_or_insert(symptom_name=s)
 
-    rows = db(db.symptom.user_email == get_user_email()).select().as_list()
+    # rows = db(db.symptom.user_email == get_user_email()).select().as_list()
 
     # initialize disease model and predict with the current symptom list
     disease_model = DiseaseModel(symptom_list)
@@ -166,9 +176,23 @@ def index():
             db.doctor.update_or_insert(name=doctor_names[i],doctor_type=specialist)
             i+=1
 
-    return dict(rows=rows, form=form, symptoms=disease_model.symptom_list, url_signer=url_signer, disease=disease_model.probability,
-                search_url=URL('search', signer=url_signer), add_symptom_url=URL('add_symptom', signer=url_signer), update_symptom_url=URL('update_symptom', signer=url_signer), get_rating_url = URL('get_rating', signer=url_signer))
+    return dict(form=form, 
+                symptoms=disease_model.symptom_list, 
+                url_signer=url_signer, 
+                disease=disease_model.probability,
+                search_url=URL('search', signer=url_signer),
+                load_symptoms_url=URL('load_symptoms', signer=url_signer),  
+                add_symptom_url=URL('add_symptom', signer=url_signer),
+                delete_symptom_url = URL('delete_symptom', signer=url_signer),
+                update_symptom_url=URL('update_symptom', signer=url_signer), 
+                get_rating_url = URL('get_rating', signer=url_signer))
 
+@action('load_symptoms')
+@action.uses(url_signer.verify(), db, auth.user, url_signer)
+def load_symptoms():
+    rows = db(db.symptom.user_email == get_user_email()).select().as_list()
+    # print(rows)
+    return dict(symptom_list=rows)
 
 @action('search')
 @action.uses()
@@ -210,16 +234,25 @@ def search():
 
 # add a given symptom to a user's symptom list. put something in has_symptom table?
 
+@action('delete_symptom', method='POST')
+@action.uses(url_signer.verify(), db, auth.user, url_signer)
+def delete_symptom():
+    symptom = request.params.get('symptom')
+    print(symptom)
+    assert symptom is not None
+    db((db.symptom.symptom_name == symptom) & (db.symptom.user_email == get_user_email())).delete()
+    return "ok"
 
 @action('update_symptom', method="POST")
 @action.uses(url_signer.verify(), db)
 def update_symptom():
     # get the from symptom_table
-    symptoms = request.json.get('symptoms')
-    for s in symptoms:
-        db.symptom.insert(
-            symptom_list=s,
-        )
+    symptom_name = request.json.get('symptom_name')
+    
+    print(symptom_name)
+    db.symptom.insert(
+        symptom_name=symptom_name,
+    )
     return "update symptom"
 
 
@@ -249,16 +282,16 @@ def update_symptom():
 
 #     return dict(form=form)
 
-# @action('add_post', method="POST")
+# @action('add_symptom', method="POST")
 # @action.uses(url_signer.verify(), db, auth.user, url_signer)
-# def add_post():
-#     id = db.post.insert(
+# def add_symptom():
+#     id = db.symptom.insert(
 #         text=request.json.get('text'),
 #         # author=request.json.get('author'),
 #         # author=get_user_author(),
 #     )
 #     review_id = db.review.insert(
-#         post_id=id
+#         symptom_id=id
 #     )
     
 #     return dict(id=id, review_id=review_id, cur_author=cur_author)

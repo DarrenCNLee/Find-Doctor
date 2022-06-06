@@ -26,6 +26,18 @@ let init = (app) => {
         return a;
     };
 
+    app.decorate = (a) => {
+        a.map((e) => {
+            e._server_vals = {
+                text: e.text, 
+                author: e.author, 
+                cur: e.cur, 
+                reaction: e.reaction,
+                reacters: e.reacters,
+            };
+        });
+        return a;
+    };
 
     app.add_review = function () {
         axios.post(add_review_url,

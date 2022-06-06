@@ -1,4 +1,4 @@
-timestamp: 2022-06-04T03:53:22.183604
+timestamp: 2022-06-06T05:54:15.250374
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "email" CHAR(512) UNIQUE,
@@ -11,14 +11,14 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2022-06-04T03:53:22.193558
+timestamp: 2022-06-06T05:54:15.295544
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "tagpath" CHAR(512),
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2022-06-04T03:53:22.200006
+timestamp: 2022-06-06T05:54:15.327913
 CREATE TABLE "user_info"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(512),
@@ -28,33 +28,33 @@ CREATE TABLE "user_info"(
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2022-06-04T03:53:22.205958
+timestamp: 2022-06-06T05:54:15.360933
 CREATE TABLE "symptom"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "symptom_list" CHAR(512),
+    "symptom_name" CHAR(512),
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2022-06-04T03:53:22.211414
+timestamp: 2022-06-06T05:54:15.390192
 CREATE TABLE "symptoms"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "symptom_name" CHAR(512)
 );
 success!
-timestamp: 2022-06-04T03:53:22.217366
+timestamp: 2022-06-06T05:54:15.414367
 CREATE TABLE "diseases"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "disease_name" CHAR(512)
 );
 success!
-timestamp: 2022-06-04T03:53:22.222326
+timestamp: 2022-06-06T05:54:15.440283
 CREATE TABLE "doctor"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" CHAR(512),
     "doctor_type" CHAR(512)
 );
 success!
-timestamp: 2022-06-04T03:53:22.227286
+timestamp: 2022-06-06T05:54:15.471089
 CREATE TABLE "review"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "doctor_info" INTEGER REFERENCES "doctor" ("id") ON DELETE CASCADE  ,

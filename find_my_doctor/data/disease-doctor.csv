@@ -1,42 +1,42 @@
-Disease, Specialist
-Fungal Infection, Dermatologist
-Allergy, Allergist
-Gerd, Gastroenterologist
-Chronic Cholestasis, Gastroenterologist
-Drug Reaction, General Physician
-Peptic Ulcer Disease, Gastroenterologist
-Aids, General Physician
-Diabetes, Endocrinologist
-Gastroenteritis, Gastroenterologist
-Bronchial Asthma, Pulmonologist
-Hypertension, Nephrologist
-Migraine, Neurologist
-Cervical Spondylosis, Orthopedist
-Paralysis (Brain Hemorrhage), Neurologist
-Jaundice, Gastroenterologist
-Malaria, General Physician
-Chicken Pox, General Physician
-Dengue, General Physician
-Typhoid, General Physician
-Hepatitis A, Hepatologist
-Hepatitis B, Hepatologist
-Hepatitis C, Hepatologist
-Hepatitis D, Hepatologist
-Hepatitis E, Hepatologist
-Alcoholic Hepatitis, Hepatologist
-Tuberculosis, Pulmonologist
-Common Cold, Otolaryngologist
-Pneumonia, Pulmonologist
-Dimorphic Hemmorhoids(Piles), Gastroenterologist
-Heart Attack, Cardiologist
-Varicose Veins, Phlebologist
-Hypothyroidism, Endocrinologist
-Hyperthyroidism, Endocrinologist
-Hypoglycemia, Endocrinologist
-Osteoarthristis, Rheumatologist
-Arthritis, Rheumatologist
-(Vertigo) Paroymsal Positional Vertigo, Otolaryngologist
-Acne, Dermatologist
-Urinary Tract Infection, Urologist
-Psoriasis, Dermatologists
-Impetigo, Dermatologists
+disease,specialist
+Fungal Infection,Dermatologist
+Allergy,Allergist
+Gerd,Gastroenterologist
+Chronic Cholestasis,Gastroenterologist
+Drug Reaction,General Physician
+Peptic Ulcer Disease,Gastroenterologist
+Aids,General Physician
+Diabetes,Endocrinologist
+Gastroenteritis,Gastroenterologist
+Bronchial Asthma,Pulmonologist
+Hypertension,Nephrologist
+Migraine,Neurologist
+Cervical Spondylosis,Orthopedist
+Paralysis (Brain Hemorrhage),Neurologist
+Jaundice,Gastroenterologist
+Malaria,General Physician
+Chicken Pox,General Physician
+Dengue,General Physician
+Typhoid,General Physician
+Hepatitis A,Hepatologist
+Hepatitis B,Hepatologist
+Hepatitis C,Hepatologist
+Hepatitis D,Hepatologist
+Hepatitis E,Hepatologist
+Alcoholic Hepatitis,Hepatologist
+Tuberculosis,Pulmonologist
+Common Cold,Otolaryngologist
+Pneumonia,Pulmonologist
+Dimorphic Hemmorhoids(Piles),Gastroenterologist
+Heart Attack,Cardiologist
+Varicose Veins,Phlebologist
+Hypothyroidism,Endocrinologist
+Hyperthyroidism,Endocrinologist
+Hypoglycemia,Endocrinologist
+Osteoarthristis,Rheumatologist
+Arthritis,Rheumatologist
+(Vertigo) Paroymsal Positional Vertigo,Otolaryngologist
+Acne,Dermatologist
+Urinary Tract Infection,Urologist
+Psoriasis,Dermatologists
+Impetigo,Dermatologists
