@@ -28,130 +28,78 @@
                 User Info
             </a>
         </div>
-        
+
         <div class="level-item has-text-centered">
-            <a class ="button is-link" href="[[=URL('doctors')]]">
+            <a class="button is-link" href="[[=URL('doctors')]]">
                 Doctors
             </a>
         </div>
     </nav>
-    <div class="columns is-mobile is-centered">
 
-        <div class="column">
+    <section class="section">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-half is-centered">
 
-            <section class="section">
-                <div class="container">
-                    <div class="columns is-mobile is-centered">
-                        <div class="column is-half is-centered">
+                    <label class="label">Find a doctor near you</label>
 
-                            <label class="label">Find a doctor near you</label>
+                    [[=form]]
 
-                            [[=form]]
+                    <div id="vue-target" v-cloak>
+                        <div class="control block">
+                            <input class="input" type="text" v-model="query" @keyup="search" />
+                        </div>
 
-                            <div id="vue-target" v-cloak>
-                                <div class="control block">
-                                  <input class="input" type="text" v-model="query" @keyup="search" />
-                                </div>
-
-                                <table class="table is-striped is full-width">
-                                        <tr>
-                                            <th></th>
-                                            <th></th>
-                                        </tr>
-                                        <tr v-for="r in results">
-                                            <th>{{r.symptom_name}}</th>
-                                            <!--
+                        <table class="table is-striped is full-width">
+                            <tr>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            <tr v-for="r in results">
+                                <th>{{r}}</th>
+                                <!--
                                                 <div v-if="has_symptom(r.symptom)">
-                                                    <td><button class="button is-primary" @click="remove_symptom(r.symptom_name)"><Remove></button></td>
+                                                    <td><button class="button is-primary" @click="remove_symptom(r)"><Remove></button></td>
                                                 </div>
                                                 <div v-else>
-                                                    <td><button class="button is-primary" @click="add_symptom(r.symptom_name)">Add</button></td>
+                                                    <td><button class="button is-primary" @click="add_symptom(r)">Add</button></td>
                                                 </div>
                                                 -->
-                                            <td><button class="button is-primary" @click="add_symptom(r.symptom_name)">Add</button></td>
-                                        </tr>
-                                </table>
+                                <td><button class="button is-primary" @click="add_symptom(r)">Add</button>
+                                </td>
+                            </tr>
+                        </table>
 
-                                <div v-for="s in symptom_list">{{s}}</div>
-                            </div>
+                        <div v-for="s in symptom_list">{{s}}</div>
+                    </div>
 
-                            <section>
-                            </section>
+                    <section>
+                    </section>
 
-                            <h1 class="subtitle">Symptoms Listed:</h1>
-                            <ul>
-                                [[for row in rows:]]
-                                <li>[[=row["symptom_list"]]]
-                                </li>
-                                [[pass]]
-                            </ul>
-
+                    <h1 class="subtitle">Symptoms Listed:</h1>
+                    <ul>
+                        [[for row in rows:]]
+                        <div class="box p-2 m-1">
+                            [[=row["symptom_list"]]]
+                            <!-- <a class="button is-danger" href="[[=URL('delete_symptom', row['symptom_list'], signer=url_signer)]]">
+                                <span class="icon"><i class="fa fa-fw fa-trash"></i></span>
+                              </a> -->
                         </div>
-                        <div class="column">
+                        [[pass]]
+                    </ul>
 
-                            <div class="field">
+                </div>
 
-                                <br>
+                <div class="column is-half is-centered">
+                    [[for i, row in disease.iterrows():]]
+                    <li>[[=row["disease"]]] : [[=row["prob"]]]
+                    </li>
+                    [[pass]]
 
-                                <div class="column is-half is-centered">
 
-                                    <ul>
-                                        [[=disease.shape]]
-                                        [[for i, row in disease.iterrows():]]
-                                        <li>[[=row["disease"]]] : [[=row["prob"]]]
-                                        </li>
-                                        [[pass]]
-                                    </ul>
-                                    <!-- <div class="dropdown is-hoverable">
-                                <div class="dropdown-trigger">
-                                    <button class="button is-warning is-fullwidth" aria-haspopup="true"
-                                        aria-controls="dropdown-menu">
-                                        <span>Symptoms</span>
-                                        <span class="icon is-small">
-                                            <i class="fas fa-angle-down" aria-hidden="true"></i>
-                                        </span>
-                                    </button>
-                                </div>
-
-                                <div class="dropdown-menu" id="dropdown-menu" role="menu">
-                                    <div class="dropdown-content">
-                                        [[#for sympt in symptoms:]]
-                                        <a href="#" class="dropdown-item">
-                                            [[#under = '_']]
-                                            [[#for under in sympt:]]
-                                            [[#sympt_wo = sympt.replace('_', ' ')]]
-                                            [[#pass]]
-                                            [[#=sympt_wo]]
-                                            <label class="checkbox">
-                                                <input type="checkbox">
-
-                                            </label>
-                                        </a>
-                                        <hr class="dropdown-divider">
-                                        [[#pass]]
-                                        <a class="dropdown-item">
-                                            Leg cramps
-                                            <label class="checkbox">
-                                                <input type="checkbox">
-
-                                            </label>
-                                        </a>
-                                        <hr class="dropdown-divider">
-                                        <a href="#" class="dropdown-item">
-                                            Aches
-                                            <label class="checkbox">
-                                                <input type="checkbox">
-
-                                            </label>
-                                        </a>
-
-                                    </div>
-                                </div>
-                            </div> -->
-                                </div>
-            </section>
-        </div>
-    </div>
+                </div>
+            </div>
+    </section>
 </body>
 
 </html>
@@ -159,8 +107,8 @@
 [[block page_scripts]]
 <!-- Loads the index-specific js for Vue -->
 <script>
-  let search_url = "[[=XML(search_url)]]";
-  let update_symptom_url = "[[=XML(update_symptom_url)]]";
+    let search_url = "[[=XML(search_url)]]";
+    let update_symptom_url = "[[=XML(update_symptom_url)]]";
 </script>
 <script src="js/index.js"></script>
 [[end]]

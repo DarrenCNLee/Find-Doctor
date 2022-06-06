@@ -44,7 +44,8 @@ url_signer = URLSigner(session)
 
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
-
+symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
+    
 specialist_list = ["Dermatologist", "Allergist", "Gastroenterologist", "General Physician", "Endocrinologist", "Pulmonologist", "Neurologist",
                    "Nephrologist", "Orthopedist", "Hepatologist", "Pulmonologist", "Otolaryngologist", "Cardiologist", "Phlebologist", "Rheumatologist", "Urologist"]
 
@@ -143,7 +144,7 @@ class DiseaseModel():
 def index():
 
     # create symptoms db once
-    symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
+    # symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
     for s in symptom_list:
         db.symptoms.update_or_insert(symptom_name=s)
 
@@ -175,10 +176,10 @@ def search():
     q = request.params.get("q").lower()
 
     # scuffed way of getting symptom list (in lower case)
-    rows = db(db.symptoms.symptom_name).select().as_list()
+    rows = symptom_list.tolist()
     symptoms = list()
     for row in rows:
-        symptoms.append(row['symptom_name'].lower())
+        symptoms.append(row.lower())
     print("symptoms: " + str(symptoms))
 
     # check if the word starts with
@@ -192,16 +193,17 @@ def search():
                 if word.startswith(q):
                     autocomplete.append(symptom)
     print("autocomplete: " + str(autocomplete))
-    results = db(
-        (db.symptoms.symptom_name == q) | (
-            db.symptoms.symptom_name == q.capitalize())
-    ).select()
+    results = []
+
+    for s in rows:
+        if s == q.capitalize() or s == q:
+            results.append(s)
 
     for item in autocomplete:
-        results |= db(
-            (db.symptoms.symptom_name == item) | (db.symptoms.symptom_name == string.capwords(item))).select()
+        for s in rows:
+            if (s == item) or (s == string.capwords(item)):
+                results.append(s)
 
-    results = results.as_list()
 
     print(q, results)
     return dict(symptoms=symptoms, results=results)
@@ -214,12 +216,29 @@ def search():
 def update_symptom():
     # get the from symptom_table
     symptoms = request.json.get('symptoms')
-    db.symptom.update_or_insert(
-        # trying to app or append symptom to the symptom list
-        (db.symptom.user_email == get_user_email()),
-        symptom_list=symptoms,
-    )
+    for s in symptoms:
+        db.symptom.insert(
+            symptom_list=s,
+        )
     return "update symptom"
+
+
+# @action('delete_symptom/<symptom_id:Str>')
+# @action.uses(db, session, auth.user, url_signer.verify())
+# def delete_symptom(symptom_id=None):
+#     assert symptom_id is not None
+#     db(db.symptom.symptom_list == symptom_id).delete()
+#     redirect(URL('index'))
+
+# for vue, not implemented yet, using link redirecting one above
+
+# @action('delete_symptom')
+# @action.uses(url_signer.verify(), db, auth.user, url_signer)
+# def delete_symptom():
+#     id = request.params.get('id')
+#     assert id is not None
+#     db(db.symptom.id == id).delete()
+#     return "ok"
 
 # @action('add_symptom', method=["GET", "POST"])
 # @action.uses('add_symptom.html', url_signer, db, session, auth.user)
@@ -229,6 +248,21 @@ def update_symptom():
 #         redirect(URL('index'))
 
 #     return dict(form=form)
+
+# @action('add_post', method="POST")
+# @action.uses(url_signer.verify(), db, auth.user, url_signer)
+# def add_post():
+#     id = db.post.insert(
+#         text=request.json.get('text'),
+#         # author=request.json.get('author'),
+#         # author=get_user_author(),
+#     )
+#     review_id = db.review.insert(
+#         post_id=id
+#     )
+    
+#     return dict(id=id, review_id=review_id, cur_author=cur_author)
+
 
 
 @action("user_info")  # , method=["GET", "POST"]
