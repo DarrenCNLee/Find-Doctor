@@ -261,6 +261,7 @@ def delete_symptom():
     print(symptom)
     assert symptom is not None
     db((db.symptom.symptom_name == symptom) & (db.symptom.user_email == get_user_email())).delete()
+    redirect(URL("index"))
     return "ok"
 
 @action('update_symptom', method="POST")
@@ -270,7 +271,8 @@ def update_symptom():
     symptom_name = request.json.get('symptom_name')
     
     print(symptom_name)
-    db.symptom.insert(
+    db.symptom.update_or_insert(
+        ((db.symptom.user_email == get_user_email()) & (db.symptom.symptom_name == symptom_name)),
         symptom_name=symptom_name,
     )
     return "update symptom"
@@ -438,9 +440,11 @@ def edit_user_info(user_info_id=None):
     return dict(form=form)
 
 
-@action("doctors")
+@action("doctors/<specialist>")
 @action.uses('doctors.html', url_signer, db, session, auth.user)
-def doctors():
+def doctors(specialist=None):
+    assert specialist is not None
+
     return dict(
         load_reviews_url = URL('load_reviews', signer=url_signer),
         add_review_url = URL('add_review', signer=url_signer),

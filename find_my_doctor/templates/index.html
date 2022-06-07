@@ -106,7 +106,7 @@
                             </i>
                         </a>
                         [[if not need_location:]]
-                        <a class="button is-link" href="https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=[[=row['specialist']]]&location=[[=user_loc]]&types=doctor&radius=10000&key=[[=api_key]]"  target="_blank" rel="noopener noreferrer">
+                        <a class="button is-link" href="[[=URL('doctors', row['specialist'])]] ">
                             <i class="fa fa-search">
                                 Rate [[=row["specialist"]]]s 
                             </i>
