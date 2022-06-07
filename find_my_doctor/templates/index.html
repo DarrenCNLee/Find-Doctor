@@ -87,17 +87,31 @@
                 </div>
 
                 <div class="column is-half is-centered">
+                    [[if need_location:]]
+                    <div class="container block">
+                        Need location and filled information to search doctor.
+                        <a class="button is-danger" href="[[=URL('user_info')]]">
+                            Add location
+                        </a>
+                    </div>
+                    [[pass]]
                     <div class="subtitle">Possible health concerns</div>
                     [[for i, row in disease.iterrows():]]
                     <div class="box">
                     <p>[[=row["disease"]]] : [[=row["prob"]]]</p>
                     <p>Recommended doctor: [[=row["specialist"]]]</p>
-                        <a class="button is-success" href="https://www.google.com/search?q=[[=row["specialist"]]]+near+me" target="_blank" rel="noopener noreferrer">
+                        <a class="button is-success" href="https://www.google.com/search?q=[[=row['specialist']]]+near+me" target="_blank" rel="noopener noreferrer">
                             <i class="fa fa-google">
                                 Search [[=row["specialist"]]]s in your area
                             </i>
                         </a>
-                    
+                        [[if not need_location:]]
+                        <a class="button is-link" href="https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=[[=row['specialist']]]&location=[[=user_loc]]&types=doctor&radius=10000&key=[[=api_key]]"  target="_blank" rel="noopener noreferrer">
+                            <i class="fa fa-search">
+                                Rate [[=row["specialist"]]]s 
+                            </i>
+                        </a>
+                        [[pass]]
                     </div>
                     [[pass]]
 

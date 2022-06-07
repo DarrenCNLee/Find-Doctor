@@ -2,6 +2,7 @@
 This file defines the database models
 """
 
+from logging import PlaceHolder
 from .common import db, Field, auth, T
 from pydal.validators import *
 from .settings import APP_FOLDER
@@ -39,8 +40,11 @@ db.define_table(
     'user_info',
     Field('first_name', requires=IS_NOT_EMPTY(), default=get_first_name),
     Field('last_name', requires=IS_NOT_EMPTY(), default=get_last_name),
+    Field('location'),
+    Field('lat'),
+    Field('lng'),
     Field('age', requires=IS_INT_IN_RANGE(0, 151)),
-    Field('sex', requires=IS_IN_SET(["M", "F"])),
+    Field('sex', requires=IS_IN_SET(["Male", "Female", "Other"])),
     Field('user_email', default=get_user_email),
 )
 

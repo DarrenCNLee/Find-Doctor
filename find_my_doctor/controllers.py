@@ -36,10 +36,12 @@ from .settings import APP_FOLDER
 import pandas as pd
 import numpy as np
 import os
+import requests
 import uuid
 import random
 import string
 
+api_key = "AIzaSyBgTJS9QCriBb51awuSN9QkDfo29LiTEqw"
 url_signer = URLSigner(session)
 
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
@@ -127,8 +129,8 @@ class DiseaseModel():
         self.probability = pd.DataFrame(columns=["disease", "prob"])
         self.probability['disease'] = self.disease_list["Disease"]
         self.probability = pd.merge(self.probability, specialist_df, how="left")
-        print(self.probability)
-        
+        # print(self.probability)
+
     def predict(self):
         symptom_list = self.symptom_list
         if not self.user_symptoms:
@@ -175,8 +177,26 @@ def index():
         for _ in range(3): 
             db.doctor.update_or_insert(name=doctor_names[i],doctor_type=specialist)
             i+=1
+    # del db.user_info[5]
 
-    return dict(form=form, 
+    person_info = db(db.user_info.user_email == get_user_email()).select().first()
+    print(person_info)
+    if person_info is None or person_info.location is None:
+        need_location = True
+        user_loc = "36.9741171%2C-122.0307963"
+        print("no location")
+    else:
+        need_location = False
+        user_loc = person_info.lat + "%2C" + person_info.lng
+        print("location exists")
+
+    
+    
+
+    return dict(form=form,
+                need_location = need_location,
+                api_key=api_key,
+                user_loc=user_loc,
                 symptoms=disease_model.symptom_list, 
                 url_signer=url_signer, 
                 disease=disease_model.probability,
@@ -323,15 +343,33 @@ def add_user_info():
     form = Form([Field('First_Name', requires=IS_NOT_EMPTY(), default=get_first_name),
                  Field('Last_Name', requires=IS_NOT_EMPTY(),
                        default=get_last_name),
+                 Field('Location'),
                  Field('Age', requires=IS_INT_IN_RANGE(0, 151)),
                  Field('Sex', requires=IS_IN_SET(["M", "F"]))],
                 csrf_session=session,
                 formstyle=FormStyleBulma)
 
     if form.accepted:
+        if form.vars['Location'] is "":
+            loc = None
+            lat = None
+            lng = None
+        else:
+            loc = form.vars['Location']
+            # https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=cruise&location=36.9741171%2C-122.0307963&radius=1500&key=AIzaSyBgTJS9QCriBb51awuSN9QkDfo29LiTEqw
+            loc_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=" + api_key
+            loc_info = requests.get(loc_url).json()
+            loc_result = loc_info.get("results")[0]["geometry"]["location"]
+            print(loc_result)
+            lat = loc_result["lat"]
+            lng = loc_result["lng"]
+
         db.user_info.insert(
             first_name=form.vars["First_Name"],
             last_name=form.vars['Last_Name'],
+            location=loc,
+            lat=lat,
+            lng=lng,
             age=form.vars['Age'],
             sex=form.vars['Sex'],)
         redirect(URL('user_info'))
@@ -343,22 +381,62 @@ def add_user_info():
 
 @action('edit_user_info/<user_info_id:int>', method=["GET", "POST"])
 @action.uses('edit_user_info.html', url_signer.verify(), url_signer, db, session, auth.user)
-def edit_user_info(
-    user_info_id=None
-):
+def edit_user_info(user_info_id=None):
     assert user_info_id is not None
     user = db.user_info[user_info_id]
-
+    
     if user is None or user["user_email"] != get_user_email():
         redirect(URL('user_info'))
 
-    form = Form(db.user_info, record=user, deletable=False, csrf_session=session,
+    # form = Form(db.user_info, 
+    #             record=user, 
+    #             deletable=False, 
+    #             csrf_session=session,
+    #             formstyle=FormStyleBulma)
+
+    # if form.accepted:
+    #     redirect(URL('user_info'))
+
+    # return dict(form=form)
+    form = Form([Field('First_Name', requires=IS_NOT_EMPTY(), default=get_first_name),
+                 Field('Last_Name', requires=IS_NOT_EMPTY(),
+                       default=get_last_name),
+                 Field('Location', default=user.location),
+                 Field('Age', requires=IS_INT_IN_RANGE(0, 151), default=user.age),
+                 Field('Sex', requires=IS_IN_SET(["Male", "Female", "Other"]), default=user.sex)],
+                csrf_session=session,
                 formstyle=FormStyleBulma)
 
     if form.accepted:
+        if form.vars['Location'] is "":
+            loc = None
+            lat = None
+            lng = None
+        else:
+            loc = form.vars['Location']
+            lat = user.lat
+            lng = user.lng
+            if loc != user.location:
+                loc_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=" + api_key
+                loc_info = requests.get(loc_url).json()
+                loc_result = loc_info.get("results")[0]["geometry"]["location"]
+                print(loc_result)
+                lat = loc_result["lat"]
+                lng = loc_result["lng"]
+
+        db.user_info[user_info_id] = dict(
+            first_name=form.vars["First_Name"],
+            last_name=form.vars['Last_Name'],
+            location=loc,
+            lat=lat,
+            lng=lng,
+            age=form.vars['Age'],
+            sex=form.vars['Sex'],)
+
         redirect(URL('user_info'))
 
     return dict(form=form)
+
 
 @action("doctors")
 @action.uses('doctors.html', url_signer, db, session, auth.user)

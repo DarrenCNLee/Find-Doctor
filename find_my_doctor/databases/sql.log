@@ -64,3 +64,11 @@ CREATE TABLE "review"(
     "user_info" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  
 );
 success!
+timestamp: 2022-06-06T20:51:44.636423
+ALTER TABLE "user_info" ADD "location" CHAR(512);
+success!
+timestamp: 2022-06-06T22:50:25.606532
+ALTER TABLE "user_info" ADD "lat" CHAR(512);
+timestamp: 2022-06-06T22:50:25.620480
+ALTER TABLE "user_info" ADD "lng" CHAR(512);
+success!
