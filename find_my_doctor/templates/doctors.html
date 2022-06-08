@@ -26,7 +26,7 @@
                 <!-- Each doctor will have there own add review button -->
                 <p class="mb-2"></p>
                 <div v-if="!add_mode">
-                    <button @click="set_add_status(true, doctor._idx)" class="button is-primary">
+                    <button @click="set_add_status(true, doctor._idx, doctor.name)" class="button is-primary">
                         <i class="fa fa-plus fa-fw"></i>
                     </button>
                 </div>
@@ -62,7 +62,7 @@
                 <div class="container block">
                     <div v-if="!reviews.length">No reviews</div>
                     <div v-for="review in reviews.slice().reverse()">
-                        <div v-if="review.doctor_id == doctor._idx">
+                        <div v-if="review.doctor_name == doctor.name">
                             <div class="has-text-black">{{review.review_message}}</div>
                             <span v-for="star_idx in [1, 2, 3, 4, 5]">
                                 <i v-if="star_idx <= review.star_rating" class="fa fa-star"></i>

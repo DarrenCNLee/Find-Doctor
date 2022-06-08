@@ -11,7 +11,8 @@ let init = (app) => {
     app.data = {
         // Complete as you see fit.
         add_mode: false,
-        current_doctor_id: 0,
+        current_doctor_id: "",
+        current_doctor_name: "",
         add_review_message: "",
         add_review_rating: 0,
         current_user_email: "",
@@ -40,13 +41,13 @@ let init = (app) => {
     app.add_review = function () {
         axios.post(add_review_url,
             {
-                doctor_id: app.vue.current_doctor_id,
+                doctor_name: app.vue.current_doctor_name,
                 review_message: app.vue.add_review_message,
                 star_rating: app.vue.add_review_rating,
             }).then(function (response) {
                 app.vue.reviews.push({
                     id: response.data.id,
-                    doctor_id: app.vue.current_doctor_id,
+                    doctor_name: app.vue.current_doctor_name,
                     review_message: app.vue.add_review_message,
                     star_rating: app.vue.add_review_rating,
                     name: response.data.name,
@@ -61,11 +62,16 @@ let init = (app) => {
     app.reset_form = function() {
         app.vue.add_review_message = "";
         app.vue.add_review_rating = 0;
+        app.vue.current_doctor_name = "";
     };
 
-    app.set_add_status = function (new_status, doctor_row_id) {
+    app.set_add_status = function (new_status, doctor_row_id, doctor_row_name) {
+        console.log(doctor_row_id);
+        console.log(doctor_row_name);
+
         app.vue.add_mode = new_status;
-        app.vue.current_doctor_id = doctor_row_id
+        app.vue.current_doctor_id = doctor_row_id;
+        app.vue.current_doctor_name = doctor_row_name;
     };
 
     // This contains all the methods.

@@ -317,3 +317,191 @@ success!
 DELETE FROM "doctor";
 DELETE FROM sqlite_sequence WHERE name='doctor'
 success!
+success!
+success!
+success!
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+success!
+timestamp: 2022-06-07T20:41:17.199644
+ALTER TABLE "review" ADD "user_name" CHAR(512);
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+success!
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+timestamp: 2022-06-07T20:52:05.673322
+ALTER TABLE "review" ADD "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  ;
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+success!
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+success!
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!

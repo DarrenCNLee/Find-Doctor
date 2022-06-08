@@ -432,7 +432,7 @@ def add_review():
     name = r.first_name + " " + r.last_name if r is not None else "Unknown"
     doctor_reference = db(db.doctor.id == request.json.get('doctor_id')).select().first()
     review_id = db.review.insert(
-        doctor_id=request.json.get('doctor_id'),
+        doctor_name=request.json.get('doctor_name'),
         star_rating=request.json.get('star_rating'),
         review_message=request.json.get('review_message'),
         name=name,
