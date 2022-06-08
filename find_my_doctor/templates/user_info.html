@@ -2,25 +2,47 @@
 
 <div class="section">
 
-    <h1 class="title">User Info:</h1>
+    <h1 class="title mb-1">User Info:</h1>
 
-    <table class="table is-fullwidth">
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Location</th>
-            <th>Age</th>
-            <th>Sex</th>
-        </tr>
-        <tr>
-            <td>[[=user.first_name]]</td>
-            <td>[[=user.last_name]]</td>
-            <td>[[=user.location]]</td>
-            <td>[[=user.age]]</td>
-            <td>[[=user.sex]]</td>
-        </tr>
-    </table>
 
+    <section class="section">
+        <nav class="level">
+            <nav class="level-left">
+                <div class="level-item"><h4 class="title is-4">First Name:</h4></div>
+                <div class="level-item"><h4 class="subtitle is-4">[[=user.first_name]]</h4></div>
+            </nav>          
+        </nav>
+
+        <nav class="level">
+            <nav class="level-left">
+                <div class="level-item"><h4 class="title is-4">Last Name:</h4></div>
+                <h4 class="subtitle is-4">[[=user.last_name]]</h4>
+            </nav>
+        </nav>
+        
+        <nav class="level">
+            <nav class="level-left">
+                <div class="level-item"><h4 class="title is-4">Location:</h4></div>
+                <h4 class="subtitle is-4">[[=user.location]]</h4>
+            </nav>
+        </nav>
+
+        <nav class="level">
+            <nav class="level-left">
+                <div class="level-item"><h4 class="title is-4">Age:</h4></div>
+                <h4 class="subtitle is-4">[[=user.age]]</h4>
+            </nav>
+        </nav>
+
+        <nav class="level">
+            <nav class="level-left">
+                <div class="level-item"><h4 class="title is-4">Sex:</h4></div>
+                <h4 class="subtitle is-4">[[=user.sex]]</h4>
+            </nav>
+        </nav>        
+    </section>
+    
+    
     <a class="button is-primary" href="[[=URL('edit_user_info',user.id,signer=url_signer)]]">
         <span>Edit User Info</span>
     </a>
