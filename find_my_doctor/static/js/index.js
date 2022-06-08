@@ -7,6 +7,7 @@ let app = {};
 // creates a Vue instance, and then initializes the Vue instance.
 let init = (app) => {
 
+
     // This is the Vue data.
     app.data = {
         // Complete as you see fit.
@@ -25,8 +26,9 @@ let init = (app) => {
 
     app.add_symptom = function (symptom_name) {
         //need to push and crap, plus add this to methods list
-        app.vue.symptom_list.push(symptom_name);
-        axios.post(update_symptom_url, { symptom_name: symptom_name});
+        newSymptom =
+            app.vue.symptom_list.push({ symptom_name: symptom_name });
+        axios.post(update_symptom_url, { symptom_name: symptom_name });
         app.enumerate(app.vue.symptom_list);
         app.vue.query = "";
         app.vue.results = [];
@@ -36,10 +38,14 @@ let init = (app) => {
     //need to grab user's symptoms and put into symptom_list during init
 
     app.remove_symptom = function (symptom_name) {
-        var index = app.vue.symptom_list.indexOf(symptom_name);
-            app.vue.symptom_list.splice(index, 1);
-            app.enumerate(app.vue.symptom_list);
-        axios.post(delete_symptom_url, { symptom: symptom_name });
+        for (let i = 0; i < app.vue.symptom_list.length; i++) {
+            if (app.vue.symptom_list[i].symptom_name === symptom_name) {
+                app.vue.symptom_list.splice(i, 1);
+                app.enumerate(app.vue.symptom_list);
+                break;
+            }
+        }
+        axios.post(delete_symptom_url, { symptom: symptom_name })
     }
 
     app.search = function () {
