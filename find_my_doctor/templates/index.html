@@ -65,15 +65,6 @@
                             </tr>
                             <tr v-for="r in results">
                                 <th>{{r}}</th>
-
-                                <!--
-                                                <div v-if="has_symptom(r.symptom)">
-                                                    <td><button class="button is-primary" @click="remove_symptom(r)"><Remove></button></td>
-                                                </div>
-                                                <div v-else>
-                                                    <td><button class="button is-primary" @click="add_symptom(r)">Add</button></td>
-                                                </div>
-                                                -->
                                 <td><button class="button is-primary" @click="add_symptom(r)">Add</button>
                                 </td>
                             </tr>
