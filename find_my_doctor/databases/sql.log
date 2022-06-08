@@ -72,3 +72,32 @@ ALTER TABLE "user_info" ADD "lat" CHAR(512);
 timestamp: 2022-06-06T22:50:25.620480
 ALTER TABLE "user_info" ADD "lng" CHAR(512);
 success!
+timestamp: 2022-06-07T21:36:43.248897
+ALTER TABLE "doctor" ADD "address" CHAR(512);
+timestamp: 2022-06-07T21:36:43.260201
+ALTER TABLE "doctor" ADD "reviewed" CHAR(512);
+success!
+success!
+success!
+success!
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+success!
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!
+DELETE FROM "doctor";
+DELETE FROM sqlite_sequence WHERE name='doctor'
+success!

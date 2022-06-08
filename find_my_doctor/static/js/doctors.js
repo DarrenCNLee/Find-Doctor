@@ -29,11 +29,9 @@ let init = (app) => {
     app.decorate = (a) => {
         a.map((e) => {
             e._server_vals = {
-                text: e.text, 
-                author: e.author, 
-                cur: e.cur, 
-                reaction: e.reaction,
-                reacters: e.reacters,
+                name: e.name, 
+                address: e.address,
+                // reviewed: e.reviewed,
             };
         });
         return a;
@@ -89,7 +87,7 @@ let init = (app) => {
         // Put here any initialization code.
         // Typically this is a server GET call to load the data.
         axios.get(load_reviews_url).then(function (response) {
-            app.vue.doctors = app.enumerate(response.data.doctor_rows);
+            app.vue.doctors = app.enumerate(app.decorate(response.data.doctor_rows));
             app.vue.reviews = app.enumerate(response.data.review_rows);
             app.vue.users = app.enumerate(response.data.user_rows);
             app.vue.current_user_email = response.data.current_user_email;

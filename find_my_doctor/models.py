@@ -68,7 +68,8 @@ db.define_table(
 db.define_table(
     'doctor',
     Field('name', requires=IS_NOT_EMPTY()),
-    Field('doctor_type', requires=IS_NOT_EMPTY()),
+    Field('address', requires=IS_NOT_EMPTY()),
+    # Field('reviewed', default=False),
 )
 
 db.define_table(
