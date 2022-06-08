@@ -26,8 +26,16 @@ let init = (app) => {
 
     app.add_symptom = function (symptom_name) {
         //need to push and crap, plus add this to methods list
-        newSymptom =
+        var newSymptom = true;
+        for (let i = 0; i < app.vue.symptom_list.length; i++) {
+            if (app.vue.symptom_list[i].symptom_name === symptom_name) {
+                newSymptom = false;
+                break;
+            }
+        }
+        if (newSymptom){
             app.vue.symptom_list.push({ symptom_name: symptom_name });
+        }
         axios.post(update_symptom_url, { symptom_name: symptom_name });
         app.enumerate(app.vue.symptom_list);
         app.vue.query = "";

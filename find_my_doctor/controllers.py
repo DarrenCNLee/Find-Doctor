@@ -46,7 +46,8 @@ url_signer = URLSigner(session)
 
 symptom_list_file = os.path.join(APP_FOLDER, "data", "Symptom-list.csv")
 disease_file = os.path.join(APP_FOLDER, "data", "dataset.csv")
-specialist_dataset_file = os.path.join(APP_FOLDER, "data", "disease-doctor.csv")
+specialist_dataset_file = os.path.join(
+    APP_FOLDER, "data", "disease-doctor.csv")
 
 symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
 diseases = pd.read_csv(disease_file, sep=",", lineterminator="\n")
@@ -54,7 +55,7 @@ specialist_df = pd.read_csv(specialist_dataset_file, header=0, sep=",")
 
 # print(diseases.columns)
 
-specialist_list = specialist_df['specialist'].unique().tolist() 
+specialist_list = specialist_df['specialist'].unique().tolist()
 
 
 # specialist_list = ["Dermatologist", "Allergist", "Gastroenterologist", "General Physician", "Endocrinologist", "Pulmonologist", "Neurologist",    "Nephrologist", "Orthopedist", "Hepatologist", "Pulmonologist", "Otolaryngologist", "Cardiologist", "Phlebologist", "Rheumatologist", "Urologist"]
@@ -79,7 +80,8 @@ class DiseaseModel():
         # create empty probability for our regression model
         self.probability = pd.DataFrame(columns=["disease", "prob"])
         self.probability['disease'] = self.disease_list["Disease"]
-        self.probability = pd.merge(self.probability, specialist_df, how="left")
+        self.probability = pd.merge(
+            self.probability, specialist_df, how="left")
         # print(self.probability)
 
     def predict(self):
@@ -100,10 +102,22 @@ class DiseaseModel():
             subset=['disease'], keep='first').head(n=5)
 
 # The auth.user below forces login.
+
+
+def check_sypmtom_exist(form):
+    existing = db((db.symptom.symptom_name == form.vars['symptom_name']) & (
+        db.symptom.user_email == get_user_email())).select().first()
+    print(existing)
+    if existing is not None:
+        form.errors['symptom_name'] = T('Symptom already added')
+
+
 @action('index', method=["GET", "POST"])
 @action.uses('index.html', url_signer, db, auth.user)
 def index():
-
+    user = auth.get_user()
+    if not user:
+        redirect(URL('auth/login'))
     # create symptoms db once
     # symptom_list = np.genfromtxt(symptom_list_file, delimiter=',', dtype=str)
     # for s in symptom_list:
@@ -115,15 +129,19 @@ def index():
     disease_model = DiseaseModel(symptom_list)
     disease_model.predict()
 
-    form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
-    form.structure.find('[type=submit]')[0]['_value'] = 'Add'
+    form = Form(db.symptom,
+                validation=check_sypmtom_exist,
+                csrf_session=session,
+                formstyle=FormStyleBulma,
+                form_name="Search symptoms",
+                submit_value="Add")
 
     if form.accepted:
         redirect(URL('index'))
 
     # i=0
-    # for specialist in specialist_list: 
-    #     for _ in range(3): 
+    # for specialist in specialist_list:
+    #     for _ in range(3):
     #         db.doctor.update_or_insert(name=doctor_names[i],doctor_type=specialist)
     #         i+=1
     # del db.user_info[5]
@@ -131,29 +149,31 @@ def index():
     doc_list = db.doctor
     doc_list.truncate()
 
-    person_info = db(db.user_info.user_email == get_user_email()).select().first()
-    print(person_info)
+    person_info = db(db.user_info.user_email ==
+                     get_user_email()).select().first()
+    print(user)
     if person_info is None or person_info.location is None:
         need_location = True
         user_loc = "36.9741171%2C-122.0307963"
-        print("no location")
+        # print("no location")
     else:
         need_location = False
         user_loc = person_info.lat + "%2C" + person_info.lng
-        print("location exists")
+        # print("location exists")
 
     return dict(form=form,
-                need_location = need_location,
+                need_location=need_location,
                 api_key=api_key,
                 user_loc=user_loc,
-                symptoms=disease_model.symptom_list, 
-                url_signer=url_signer, 
+                symptoms=disease_model.symptom_list,
+                url_signer=url_signer,
                 disease=disease_model.probability,
                 search_url=URL('search', signer=url_signer),
-                load_symptoms_url=URL('load_symptoms', signer=url_signer),  
+                load_symptoms_url=URL('load_symptoms', signer=url_signer),
                 add_symptom_url=URL('add_symptom', signer=url_signer),
-                delete_symptom_url = URL('delete_symptom', signer=url_signer),
+                delete_symptom_url=URL('delete_symptom', signer=url_signer),
                 update_symptom_url=URL('update_symptom', signer=url_signer))
+
 
 @action('load_symptoms')
 @action.uses(url_signer.verify(), db, auth.user, url_signer)
@@ -161,6 +181,7 @@ def load_symptoms():
     rows = db(db.symptom.user_email == get_user_email()).select().as_list()
     # print(rows)
     return dict(symptom_list=rows)
+
 
 @action('search')
 @action.uses()
@@ -194,14 +215,14 @@ def search():
     for item in autocomplete:
         for s in rows:
             if (s == item) or (s == string.capwords(item)):
-                if(s not in results):
+                if s not in results:
                     results.append(s)
-
 
     print(q, results)
     return dict(symptoms=symptoms, results=results)
 
 # add a given symptom to a user's symptom list. put something in has_symptom table?
+
 
 @action('delete_symptom', method='POST')
 @action.uses(url_signer.verify(), db, auth.user, url_signer)
@@ -209,19 +230,21 @@ def delete_symptom():
     symptom = request.params.get('symptom')
     print(symptom)
     assert symptom is not None
-    db((db.symptom.symptom_name == symptom) & (db.symptom.user_email == get_user_email())).delete()
+    db((db.symptom.symptom_name == symptom) & (
+        db.symptom.user_email == get_user_email())).delete()
     return "ok"
+
 
 @action('update_symptom', method="POST")
 @action.uses(url_signer.verify(), db)
 def update_symptom():
     # get the from symptom_table
     symptom_name = request.json.get('symptom_name')
-    
+
     print(symptom_name)
     db.symptom.update_or_insert(
-        ((db.symptom.user_email == get_user_email()) & (db.symptom.symptom_name == symptom_name)),
         symptom_name=symptom_name,
+        user_email=get_user_email(),
     )
     return "update symptom"
 
@@ -260,9 +283,8 @@ def update_symptom():
 #     review_id = db.review.insert(
 #         symptom_id=id
 #     )
-    
-#     return dict(id=id, review_id=review_id, cur_author=cur_author)
 
+#     return dict(id=id, review_id=review_id, cur_author=cur_author)
 
 
 @action("user_info")  # , method=["GET", "POST"]
@@ -304,7 +326,8 @@ def add_user_info():
         else:
             loc = form.vars['Location']
             # https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=cruise&location=36.9741171%2C-122.0307963&radius=1500&key=AIzaSyBgTJS9QCriBb51awuSN9QkDfo29LiTEqw
-            loc_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=" + api_key
+            loc_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + \
+                loc + "&key=" + api_key
             loc_info = requests.get(loc_url).json()
             loc_result = loc_info.get("results")[0]["geometry"]["location"]
             print(loc_result)
@@ -331,13 +354,13 @@ def add_user_info():
 def edit_user_info(user_info_id=None):
     assert user_info_id is not None
     user = db.user_info[user_info_id]
-    
+
     if user is None or user["user_email"] != get_user_email():
         redirect(URL('user_info'))
 
-    # form = Form(db.user_info, 
-    #             record=user, 
-    #             deletable=False, 
+    # form = Form(db.user_info,
+    #             record=user,
+    #             deletable=False,
     #             csrf_session=session,
     #             formstyle=FormStyleBulma)
 
@@ -349,7 +372,8 @@ def edit_user_info(user_info_id=None):
                  Field('Last_Name', requires=IS_NOT_EMPTY(),
                        default=get_last_name),
                  Field('Location', default=user.location),
-                 Field('Age', requires=IS_INT_IN_RANGE(0, 151), default=user.age),
+                 Field('Age', requires=IS_INT_IN_RANGE(
+                     0, 151), default=user.age),
                  Field('Sex', requires=IS_IN_SET(["Male", "Female", "Other"]), default=user.sex)],
                 csrf_session=session,
                 formstyle=FormStyleBulma)
@@ -364,7 +388,8 @@ def edit_user_info(user_info_id=None):
             lat = user.lat
             lng = user.lng
             if loc != user.location:
-                loc_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + loc + "&key=" + api_key
+                loc_url = "https://maps.googleapis.com/maps/api/geocode/json?address=" + \
+                    loc + "&key=" + api_key
                 loc_info = requests.get(loc_url).json()
                 loc_result = loc_info.get("results")[0]["geometry"]["location"]
                 print(loc_result)
@@ -385,31 +410,45 @@ def edit_user_info(user_info_id=None):
     return dict(form=form)
 
 
-@action("doctors/<specialist>")
+@action("doctors/<specialist>/<radius:int>", method=["GET", "POST"])
 @action.uses('doctors.html', url_signer, db, session, auth.user)
-def doctors(specialist=None):
+def doctors(specialist=None, radius=None):
     assert specialist is not None
-    # print(specialist)
-    person_info = db(db.user_info.user_email == get_user_email()).select().first()
+
+    doc_list = db.doctor
+    doc_list.truncate()
+
+    form = Form([Field('Radius', requires=[IS_IN_SET([5, 10, 20, 50]), IS_NOT_EMPTY()], default=radius)],
+                csrf_session=session,
+                formstyle=FormStyleBulma)
+
+    if form.accepted:
+        redirect(URL('doctors', specialist, form.vars['Radius']))
+
+    person_info = db(db.user_info.user_email ==
+                     get_user_email()).select().first()
     assert person_info is not None or person_info.location is not None
     user_loc = person_info.lat + "%2C" + person_info.lng
     # print(user_loc, person_info.age)
 
-    doctor_search = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=" + specialist + "&location=" + user_loc + "&types=doctor&radius=10000&key=" + api_key
+    doctor_search = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=" + \
+        specialist + "&location=" + user_loc + \
+        "&types=doctor&radius=" + str(radius * 1500) + "&key=" + api_key
     doctors_list = requests.get(doctor_search).json()["results"]
-  
+
     for doctor in doctors_list:
         print(doctor["business_status"])
         db.doctor.insert(
-                        name=doctor["name"],
-                        address=doctor["vicinity"])
+            name=doctor["name"],
+            address=doctor["vicinity"])
 
+    return dict(form=form,
+                specialist=specialist,
+                load_reviews_url=URL('load_reviews', signer=url_signer),
+                add_review_url=URL('add_review', signer=url_signer),
+                delete_review_url=URL('delete_review', signer=url_signer),
+                )
 
-    return dict(
-        load_reviews_url = URL('load_reviews', signer=url_signer),
-        add_review_url = URL('add_review', signer=url_signer),
-        delete_review_url = URL('delete_review', signer=url_signer),
-    )
 
 @action('load_reviews')
 @action.uses(db, url_signer.verify())
@@ -422,12 +461,14 @@ def load_reviews():
     name = r.first_name + " " + r.last_name if r is not None else "Unknown"
     return dict(doctor_rows=doctor_rows, review_rows=review_rows, user_rows=user_rows, name=name, current_user_email=current_user_email)
 
+
 @action('add_review', method="POST")
 @action.uses(db, url_signer.verify())
 def add_review():
     r = db(db.user_info.user_email == get_user_email()).select().first()
     name = r.first_name + " " + r.last_name if r is not None else "Unknown"
-    doctor_reference = db(db.doctor.id == request.json.get('doctor_id')).select().first()
+    doctor_reference = db(db.doctor.id == request.json.get(
+        'doctor_id')).select().first()
     review_id = db.review.insert(
         doctor_name=request.json.get('doctor_name'),
         star_rating=request.json.get('star_rating'),
@@ -436,10 +477,11 @@ def add_review():
     )
     return dict(id=review_id, user_id=r.id, name=name)
 
+
 @action('delete_review')
 @action.uses(db, url_signer.verify(), session, auth.user)
 def delete_review():
-    id=request.params.get('id')
+    id = request.params.get('id')
     assert id is not None
     db(db.review.id == id).delete()
     return "delete review"

@@ -30,13 +30,13 @@
     <section class="section">
         <nav class="level">
             <div class="level-item has-text-centered">
-                <a style="height:40px;width:330px" class="button is-info" href="[[=URL('user_info')]]">
+                <a class="button is-info" href="[[=URL('user_info')]]">
                     User Info
                 </a>
             </div>
 
             <div class="level-item has-text-centered">
-                <a style="height:40px;width:285px" class="button is-warning" href="[[=URL('doctors', 'General Physician')]]">
+                <a class="button is-warning" href="[[=URL('doctors', 'General Physician')]]">
                     Doctors
                 </a>
             </div>
@@ -46,9 +46,7 @@
     <section class="section"> -->
         <div class="container">
             <div class="columns is-centered">
-                <div class="column is-half is-centered">
-
-                    <label style="font-size:20px" class="label"> Find a doctor near you</label>
+                <div class="column is-one-third is-centered">
 
                     [[=form]]
 
@@ -65,15 +63,6 @@
                             </tr>
                             <tr v-for="r in results">
                                 <th>{{r}}</th>
-
-                                <!--
-                                                <div v-if="has_symptom(r.symptom)">
-                                                    <td><button class="button is-primary" @click="remove_symptom(r)"><Remove></button></td>
-                                                </div>
-                                                <div v-else>
-                                                    <td><button class="button is-primary" @click="add_symptom(r)">Add</button></td>
-                                                </div>
-                                                -->
                                 <td><button class="button is-primary" @click="add_symptom(r)">Add</button>
                                 </td>
                             </tr>
@@ -89,16 +78,28 @@
 
                 </div>
 
-                <div class="column is-half is-centered">
-                    [[if need_location:]]
-                    <div class="container block has-text-centered">
-                        Need location and filled information to search doctor.
-                        <a class="button is-danger" href="[[=URL('user_info')]]">
-                            Add location
-                        </a>
+                <div class="column is-two-thirds is-centered">
+                    <div class="column  is-three-fifths is-offset-one-fifth">
+                        [[if need_location:]]
+                        <article class="message is-warning">
+                            <div class="message-header">
+                                Warning
+                            </div>
+                            <div class="message-body">
+                                Need location and filled information to search doctor.
+                                <a class="button is-danger is-small is-outlined" href="[[=URL('user_info')]]">
+                                    Add location
+                                </a>
+                            </div>
+                        </article>
+                        [[pass]]
                     </div>
-                    [[pass]]
-                    <div class="subtitle">Possible health concerns</div>
+                    <div class="subtitle">Possible health concerns
+                        <a class="button is-link is-inverted" href="[[=URL('index')]]">
+                            <i class="fa fa-refresh"></i>
+                        </a>
+
+                    </div>
                     [[for i, row in disease.iterrows():]]
                     [[if row["prob"] > 0:]]
                     <div class="box">
@@ -113,15 +114,15 @@
                         </a> -->
                         [[if not need_location:]]
                         <a style="height:40px;width:250px" class="button is-link"
-                            href="[[=URL('doctors', row['specialist'])]] " >
-                        [[else:]]
-                        <a style="height:40px;width:250px" class="button is-link" disabled>
-                            [[pass]]
-                            <i class="fa fa-search">
-                                Search [[=row["specialist"]]]
-                            </i>
-                        </a>
-                        
+                            href="[[=URL('doctors', row['specialist'], 10)]] ">
+                            [[else:]]
+                            <a style="height:40px;width:250px" class="button is-link" disabled>
+                                [[pass]]
+                                <i class="fa fa-search">
+                                    Search [[=row["specialist"]]]
+                                </i>
+                            </a>
+
 
                     </div>
                     [[else:]]

@@ -17,6 +17,8 @@ let init = (app) => {
         add_review_message: "",
         add_review_rating: 0,
         current_user_email: "",
+        hovering: false,
+        show_reviews: false,
         doctors: [],
         reviews: [],
     };
@@ -51,14 +53,19 @@ let init = (app) => {
                     doctor_name: app.vue.current_doctor_name,
                     review_message: app.vue.add_review_message,
                     star_rating: app.vue.add_review_rating,
+                    user_email: app.vue.current_user_email,
                     name: response.data.name,
                     user_id: response.data.user_id
                 });
                 app.enumerate(app.vue.reviews);
                 app.reset_form();
                 app.set_add_status(false);
-
+                app.vue.show_reviews = true;
             });
+    };
+
+    app.set_hovering = function (hover_status) {
+        app.vue.hovering = hover_status;
     };
 
     app.reset_form = function() {
@@ -87,8 +94,8 @@ let init = (app) => {
     };
 
     app.show_delete = function (row) {
-        console.log("row email " + row.user_email)
-        console.log("current email " + app.vue.current_user_email)
+        // console.log("row email " + row.user_email)
+        // console.log("current email " + app.vue.current_user_email)
         if(row.user_email === app.vue.current_user_email){
             return true;
         } else {
@@ -103,6 +110,7 @@ let init = (app) => {
         set_add_status: app.set_add_status,
         delete_review: app.delete_review,
         show_delete: app.show_delete,
+        set_hovering: app.set_hovering,
     };
 
     // This creates the Vue instance.
