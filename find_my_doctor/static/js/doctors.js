@@ -45,12 +45,14 @@ let init = (app) => {
         axios.post(add_review_url,
             {
                 doctor_name: app.vue.current_doctor_name,
+                doctor_type: specialist,
                 review_message: app.vue.add_review_message,
                 star_rating: app.vue.add_review_rating,
             }).then(function (response) {
                 app.vue.reviews.push({
                     id: response.data.id,
                     doctor_name: app.vue.current_doctor_name,
+                    doctor_type: specialist,
                     review_message: app.vue.add_review_message,
                     star_rating: app.vue.add_review_rating,
                     user_email: app.vue.current_user_email,

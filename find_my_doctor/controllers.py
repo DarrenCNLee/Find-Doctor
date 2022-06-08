@@ -430,7 +430,7 @@ def doctors(specialist=None, radius=None):
 
     # print(user_loc, person_info.age)
 
-    if specialist == "reviewed":
+    if specialist == "Previous":
         doctors_list = db(db.review.user_email ==
                           get_user_email()).select().as_list()
         print(doctors_list)
@@ -438,7 +438,7 @@ def doctors(specialist=None, radius=None):
             for doctor in doctors_list:
                 db.doctor.insert(
                     name=doctor["doctor_name"],
-                    address=" ")
+                    address=doctor["doctor_type"])
         else:
             db.doctor.insert(
                 name="No reviews yet",
@@ -486,6 +486,7 @@ def add_review():
         'doctor_id')).select().first()
     review_id = db.review.insert(
         doctor_name=request.json.get('doctor_name'),
+        doctor_type=request.json.get('doctor_type'),
         star_rating=request.json.get('star_rating'),
         review_message=request.json.get('review_message'),
         name=name,

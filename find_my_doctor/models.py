@@ -65,6 +65,7 @@ db.define_table(
 db.define_table(
     'review',
     Field('doctor_name', requires=IS_NOT_EMPTY()),
+    Field('doctor_type', requires=IS_NOT_EMPTY()),
     Field('star_rating', requires=IS_FLOAT_IN_RANGE(0, 5), default=0),
     Field('review_message'),
     Field('name', requires=IS_NOT_EMPTY()),

@@ -10,7 +10,7 @@
 
     <!-- Title at top of page and add post button. -->
     <div class="container block">
-        <h1 class="title">Doctors</h1>
+        <h1 class="title">[[=specialist]] Reviews</h1>
         <a class="button is-link" href="[[=URL('index')]]">
             Go Back
         </a>
@@ -27,17 +27,20 @@
                 <div class="has-text-grey">{{doctor.address}}</div>
                 <!-- Each doctor will have there own add review button -->
                 <p class="mb-2"></p>
-                <div v-if="!add_mode">
-                    <button @click="set_add_status(true, doctor._idx, doctor.name)" class="button is-primary">
-                        <i class="fa fa-plus fa-fw"></i>
-                    </button>
-                    <a class="button is-success" @mouseover="set_hovering(true)" @mouseout="set_hovering(false)"
-                        :href="'https://www.google.com/search?q=' + doctor.name" target="_blank"
-                        rel="noopener noreferrer">
-                        <i class="fa fa-google"></i>
-                    </a>
-                    <a v-if="hovering" class="has-text-success">Search this result in google</a>
-                </div>
+                <span v-if="doctor.name != 'No reviews yet'">
+                    <div v-if="!add_mode">
+                        <button @click="set_add_status(true, doctor._idx, doctor.name)" class="button is-primary">
+                            <i class="fa fa-plus fa-fw"></i>
+                        </button>
+                        <a class="button is-success" @mouseover="set_hovering(true)" @mouseout="set_hovering(false)"
+                            :href="'https://www.google.com/search?q=' + doctor.name" target="_blank"
+                            rel="noopener noreferrer">
+                            <i class="fa fa-google"></i>
+                        </a>
+                        <a v-if="hovering" class="has-text-success">Search this result in google</a>
+                    </div>
+                </span>
+
 
                 <!-- Review form only shows if add_mode is true and if the current doctor's id matches -->
                 <div v-if="add_mode && current_doctor_id == doctor._idx" class="container block">
@@ -70,19 +73,19 @@
                 <p class="mb-2"></p>
                 <!-- Shows the reviews for each doctor -->
 
-                <div v-if="show_reviews" class="container block">
+                <div v-if="!show_reviews" class="container block">
                     <div v-if="!reviews.length">No reviews</div>
                     <div v-for="review in reviews.slice().reverse()">
                         <div v-if="review.doctor_name == doctor.name">
-                            <div class="columns is-vcentered">
+                            <div class="columns is-vcentered is-mobile">
                                 <div class="column is-one-fifth">
-                                    <div class="has-text-black">{{review.review_message}}</div>
+                                    <div class="has-text-black is-flex">{{review.review_message}}</div>
                                     <span v-for="star_idx in [1, 2, 3, 4, 5]">
                                         <i v-if="star_idx <= review.star_rating" class="fa fa-star"></i>
                                         <i v-if="star_idx > review.star_rating" class="fa fa-star-o"></i>
                                     </span>
                                     <div>
-                                        <i class="has-text-grey">Reviewed by {{review.name}}</i>
+                                        <i class="has-text-grey is-responsive">Reviewed by {{review.name}}</i>
                                     </div>
                                 </div>
                                 <div class="column">
@@ -92,7 +95,6 @@
                                             <i class="fa fa-trash"></i>
                                         </button>
                                     </i>
-
                                 </div>
                             </div>
                         </div>
@@ -112,6 +114,7 @@
     let load_reviews_url = "[[=XML(load_reviews_url)]]";
     let add_review_url = "[[=XML(add_review_url)]]";
     let delete_review_url = "[[=XML(delete_review_url)]]";
+    let specialist = "[[=specialist]]";
 </script>
 <script src="js/doctors.js"></script>
 [[end]]
