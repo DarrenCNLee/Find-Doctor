@@ -56,16 +56,6 @@ db.define_table(
 )
 
 db.define_table(
-    'symptoms',
-    Field('symptom_name', requires=IS_NOT_EMPTY()),
-)
-
-db.define_table(
-    'diseases',
-    Field('disease_name', requires=IS_NOT_EMPTY()),
-)
-
-db.define_table(
     'doctor',
     Field('name', requires=IS_NOT_EMPTY()),
     Field('address', requires=IS_NOT_EMPTY()),
@@ -86,7 +76,6 @@ db.define_table(
 db.user_info.id.readable = db.user_info.id.writable = False
 db.user_info.user_email.readable = db.user_info.user_email.writable = False
 db.symptom.user_email.readable = db.symptom.user_email.writable = False
-db.symptoms.id.writable = False
 db.doctor.id.readable = db.doctor.id.writable = False
 db.review.id.readable = db.review.id.writable = False
 
