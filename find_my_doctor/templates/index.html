@@ -41,7 +41,7 @@
                 </a>
             </div>
         </nav>
-    <!-- </section>
+        <!-- </section>
 
     <section class="section"> -->
         <div class="container">
@@ -54,7 +54,8 @@
 
                     <div id="vue-target" v-cloak>
                         <div class="control block">
-                            <input placeholder="Search symptoms" class="input" type="text" v-model="query" @keyup="search" />
+                            <input placeholder="Search symptoms" class="input" type="text" v-model="query"
+                                @keyup="search" />
                         </div>
 
                         <table class="table is-striped is full-width">
@@ -90,7 +91,7 @@
 
                 <div class="column is-half is-centered">
                     [[if need_location:]]
-                    <div class="container block">
+                    <div class="container block has-text-centered">
                         Need location and filled information to search doctor.
                         <a class="button is-danger" href="[[=URL('user_info')]]">
                             Add location
@@ -99,25 +100,37 @@
                     [[pass]]
                     <div class="subtitle">Possible health concerns</div>
                     [[for i, row in disease.iterrows():]]
+                    [[if row["prob"] > 0:]]
                     <div class="box">
                         <p>[[=row["disease"]]]: [[=round(row["prob"]*100,2) ]]%</p>
                         <p>Recommended doctor: [[=row["specialist"]]]</p>
-                        <a style="height:40px;width:350px" class="button is-success"
+                        <!-- <a style="height:40px;width:350px" class="button is-success"
                             href="https://www.google.com/search?q=[[=row['specialist']]]+near+me" target="_blank"
                             rel="noopener noreferrer">
                             <i class="fa fa-google">
                                 Search [[=row["specialist"]]]s in your area
                             </i>
-                        </a>
+                        </a> -->
                         [[if not need_location:]]
                         <a style="height:40px;width:250px" class="button is-link"
-                            href="[[=URL('doctors', row['specialist'])]] ">
+                            href="[[=URL('doctors', row['specialist'])]] " >
+                        [[else:]]
+                        <a style="height:40px;width:250px" class="button is-link"
+                            href="[[=URL('doctors', row['specialist'])]] " disabled>
+                            [[pass]]
                             <i class="fa fa-search">
-                                Rate [[=row["specialist"]]]s
+                                Search [[=row["specialist"]]]
                             </i>
                         </a>
-                        [[pass]]
+                        
+
                     </div>
+                    [[else:]]
+                    <div class="box">
+                        Insert more symptoms for more predictions.
+                    </div>
+                    [[break]]
+                    [[pass]]
                     [[pass]]
 
 

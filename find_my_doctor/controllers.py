@@ -57,58 +57,9 @@ specialist_df = pd.read_csv(specialist_dataset_file, header=0, sep=",")
 specialist_list = specialist_df['specialist'].unique().tolist() 
 
 
-# specialist_list = ["Dermatologist", "Allergist", "Gastroenterologist", "General Physician", "Endocrinologist", "Pulmonologist", "Neurologist",
-#                    "Nephrologist", "Orthopedist", "Hepatologist", "Pulmonologist", "Otolaryngologist", "Cardiologist", "Phlebologist", "Rheumatologist", "Urologist"]
+# specialist_list = ["Dermatologist", "Allergist", "Gastroenterologist", "General Physician", "Endocrinologist", "Pulmonologist", "Neurologist",    "Nephrologist", "Orthopedist", "Hepatologist", "Pulmonologist", "Otolaryngologist", "Cardiologist", "Phlebologist", "Rheumatologist", "Urologist"]
 
-doctor_names = ["Victoria Ahmad",
-                "Andrea Alkyone",
-                "Kamila Ryan",
-                "Burhan Dejesus",
-                "Georgia Puckett",
-                "Keisha Bourne",
-                "Caleb Grainger",
-                "Piper Jeffery",
-                "Amber Andersen",
-                "Kanye Melia",
-                "Otto Lee",
-                "Finnlay Mcclure",
-                "Astrid Krause",
-                "Louie Freeman",
-                "Gwen Cochran",
-                "Emilie Rodrigues",
-                "Elsa Morley",
-                "Abu Murillo",
-                "Stella Wainwright",
-                "Ayyan Thatcher",
-                "Aisling Hodge",
-                "Maciej Mckay",
-                "Ziva Wallace",
-                "Oliwier Akhtar",
-                "Jarred Mcneill",
-                "David Mueller",
-                "Reem Hall",
-                "Ronnie Cruz",
-                "Santino Hirst",
-                "Nasir Reader",
-                "Safwan Houston",
-                "Abigayle Church",
-                "Aeryn Hirst",
-                "Campbell Espinosa",
-                "Alana Hale",
-                "Ian Shea",
-                "Kiana Bateman",
-                "Isabel Lyons",
-                "Yasmin Thorpe",
-                "Jakub Almond",
-                "Antoni Lutz",
-                "Jazmin Cresswell",
-                "Kelsea English",
-                "Faith Hoffman",
-                "Robin Cain",
-                "Momina Paterson",
-                "Eduard Rich",
-                "Ralphy Hinton",
-                ]
+# doctor_names = ["Victoria Ahmad", "Andrea Alkyone", "Kamila Ryan", "Burhan Dejesus", "Georgia Puckett", "Keisha Bourne", "Caleb Grainger", "Piper Jeffery", "Amber Andersen", "Kanye Melia", "Otto Lee", "Finnlay Mcclure", "Astrid Krause", "Louie Freeman", "Gwen Cochran", "Emilie Rodrigues", "Elsa Morley", "Abu Murillo", "Stella Wainwright", "Ayyan Thatcher", "Aisling Hodge", "Maciej Mckay", "Ziva Wallace", "Oliwier Akhtar", "Jarred Mcneill", "David Mueller", "Reem Hall", "Ronnie Cruz", "Santino Hirst", "Nasir Reader", "Safwan Houston", "Abigayle Church", "Aeryn Hirst", "Campbell Espinosa", "Alana Hale", "Ian Shea", "Kiana Bateman", "Isabel Lyons", "Yasmin Thorpe", "Jakub Almond", "Antoni Lutz", "Jazmin Cresswell", "Kelsea English", "Faith Hoffman", "Robin Cain", "Momina Paterson", "Eduard Rich", "Ralphy Hinton", ]
 
 
 # initialize disease model
@@ -180,7 +131,7 @@ def index():
     # del db.user_info[5]
 
     doc_list = db.doctor
-    print(doc_list.truncate())
+    doc_list.truncate()
 
     person_info = db(db.user_info.user_email == get_user_email()).select().first()
     print(person_info)
@@ -308,10 +259,7 @@ def update_symptom():
 # @action.uses(url_signer.verify(), db, auth.user, url_signer)
 # def add_symptom():
 #     id = db.symptom.insert(
-#         text=request.json.get('text'),
-#         # author=request.json.get('author'),
-#         # author=get_user_author(),
-#     )
+#         text=request.json.get('text'),          # author=request.json.get('author'),          # author=get_user_author(),      )
 #     review_id = db.review.insert(
 #         symptom_id=id
 #     )
