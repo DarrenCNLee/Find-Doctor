@@ -7,6 +7,8 @@ This file is provided as an example:
 """
 import os
 from py4web.core import required_folder
+from .private.secret_settings import *
+
 
 # db settings
 APP_FOLDER = os.path.dirname(__file__)
