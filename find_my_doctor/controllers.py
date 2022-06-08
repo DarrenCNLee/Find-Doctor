@@ -427,20 +427,35 @@ def doctors(specialist=None, radius=None):
 
     person_info = db(db.user_info.user_email ==
                      get_user_email()).select().first()
-    assert person_info is not None or person_info.location is not None
-    user_loc = person_info.lat + "%2C" + person_info.lng
+
     # print(user_loc, person_info.age)
 
-    doctor_search = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=" + \
-        specialist + "&location=" + user_loc + \
-        "&types=doctor&radius=" + str(radius * 1500) + "&key=" + api_key
-    doctors_list = requests.get(doctor_search).json()["results"]
+    if specialist == "reviewed":
+        doctors_list = db(db.review.user_email ==
+                          get_user_email()).select().as_list()
+        print(doctors_list)
+        if len(doctors_list) > 0:
+            for doctor in doctors_list:
+                db.doctor.insert(
+                    name=doctor["doctor_name"],
+                    address=" ")
+        else:
+            db.doctor.insert(
+                name="No reviews yet",
+                address="Review doctors to show their records here")
 
-    for doctor in doctors_list:
-        print(doctor["business_status"])
-        db.doctor.insert(
-            name=doctor["name"],
-            address=doctor["vicinity"])
+    else:
+        assert person_info is not None or person_info.location is not None
+        user_loc = person_info.lat + "%2C" + person_info.lng
+        doctor_search = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?keyword=" + \
+            specialist + "&location=" + user_loc + \
+            "&types=doctor&radius=" + str(radius * 1500) + "&key=" + api_key
+        doctors_list = requests.get(doctor_search).json()["results"]
+
+        for doctor in doctors_list:
+            db.doctor.insert(
+                name=doctor["name"],
+                address=doctor["vicinity"])
 
     return dict(form=form,
                 specialist=specialist,
