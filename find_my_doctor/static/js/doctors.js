@@ -11,6 +11,7 @@ let init = (app) => {
     app.data = {
         // Complete as you see fit.
         add_mode: false,
+        delete_mode: false,
         current_doctor_id: "",
         current_doctor_name: "",
         add_review_message: "",
@@ -56,6 +57,7 @@ let init = (app) => {
                 app.enumerate(app.vue.reviews);
                 app.reset_form();
                 app.set_add_status(false);
+
             });
     };
 
@@ -65,13 +67,33 @@ let init = (app) => {
         app.vue.current_doctor_name = "";
     };
 
-    app.set_add_status = function (new_status, doctor_row_id, doctor_row_name) {
-        console.log(doctor_row_id);
-        console.log(doctor_row_name);
+    app.delete_review = function (review_idx) {
+        let id = app.vue.reviews[review_idx].id;
+        axios.get(delete_review_url, {params: {id: id}}).then(function (response) {
+            for(let i = 0; i < app.vue.reviews.length; i++){
+                if(app.vue.reviews[i].id == id){
+                    app.vue.reviews.splice(i, 1);
+                    app.enumerate(app.vue.reviews);
+                    break;
+                }
+            }
+        });
+    };
 
+    app.set_add_status = function (new_status, doctor_row_id, doctor_row_name) {
         app.vue.add_mode = new_status;
         app.vue.current_doctor_id = doctor_row_id;
         app.vue.current_doctor_name = doctor_row_name;
+    };
+
+    app.show_delete = function (row) {
+        console.log("row email " + row.user_email)
+        console.log("current email " + app.vue.current_user_email)
+        if(row.user_email === app.vue.current_user_email){
+            return true;
+        } else {
+            return false;
+        };
     };
 
     // This contains all the methods.
@@ -79,6 +101,8 @@ let init = (app) => {
         // Complete as you see fit.
         add_review: app.add_review,
         set_add_status: app.set_add_status,
+        delete_review: app.delete_review,
+        show_delete: app.show_delete,
     };
 
     // This creates the Vue instance.

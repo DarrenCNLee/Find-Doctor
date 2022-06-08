@@ -68,7 +68,14 @@
                                 <i v-if="star_idx <= review.star_rating" class="fa fa-star"></i>
                                 <i v-if="star_idx > review.star_rating" class="fa fa-star-o"></i>
                             </span>
-                            <div class="has-text-grey">Reviewed by {{review.name}}</div>
+                            <div class="">
+                                <i class="has-text-grey">Reviewed by {{review.name}}</i>
+                                <i v-if="show_delete(review)">
+                                    <button @click="delete_review(review._idx)" class="button is-danger is-size-6">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </i>
+                            </div>
                         </div>
                     </div>
                 </div>

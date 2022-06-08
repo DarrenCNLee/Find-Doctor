@@ -100,12 +100,6 @@ class DiseaseModel():
             subset=['disease'], keep='first').head(n=5)
 
 # The auth.user below forces login.
-def check_sypmtom_exist(form):
-    existing = db((db.symptom.symptom_name == form.vars['symptom_name']) & (db.symptom.user_email == get_user_email())).select().first()
-    print(existing)
-    if existing is not None:
-        form.errors['symptom_name'] = T('Symptom already added')
-
 @action('index', method=["GET", "POST"])
 @action.uses('index.html', url_signer, db, auth.user)
 def index():
@@ -121,7 +115,8 @@ def index():
     disease_model = DiseaseModel(symptom_list)
     disease_model.predict()
 
-    form = Form(db.symptom, validation=check_sypmtom_exist, csrf_session=session, formstyle=FormStyleBulma, submit_value="Add")
+    form = Form(db.symptom, csrf_session=session, formstyle=FormStyleBulma)
+    form.structure.find('[type=submit]')[0]['_value'] = 'Add'
 
     if form.accepted:
         redirect(URL('index'))
@@ -137,7 +132,7 @@ def index():
     doc_list.truncate()
 
     person_info = db(db.user_info.user_email == get_user_email()).select().first()
-    # print(person_info)
+    print(person_info)
     if person_info is None or person_info.location is None:
         need_location = True
         user_loc = "36.9741171%2C-122.0307963"
@@ -158,8 +153,7 @@ def index():
                 load_symptoms_url=URL('load_symptoms', signer=url_signer),  
                 add_symptom_url=URL('add_symptom', signer=url_signer),
                 delete_symptom_url = URL('delete_symptom', signer=url_signer),
-                update_symptom_url=URL('update_symptom', signer=url_signer), 
-                get_rating_url = URL('get_rating', signer=url_signer))
+                update_symptom_url=URL('update_symptom', signer=url_signer))
 
 @action('load_symptoms')
 @action.uses(url_signer.verify(), db, auth.user, url_signer)
@@ -200,7 +194,8 @@ def search():
     for item in autocomplete:
         for s in rows:
             if (s == item) or (s == string.capwords(item)):
-                results.append(s)
+                if(s not in results):
+                    results.append(s)
 
 
     print(q, results)
@@ -215,7 +210,6 @@ def delete_symptom():
     print(symptom)
     assert symptom is not None
     db((db.symptom.symptom_name == symptom) & (db.symptom.user_email == get_user_email())).delete()
-    redirect(URL("index"))
     return "ok"
 
 @action('update_symptom', method="POST")
@@ -226,8 +220,8 @@ def update_symptom():
     
     print(symptom_name)
     db.symptom.update_or_insert(
+        ((db.symptom.user_email == get_user_email()) & (db.symptom.symptom_name == symptom_name)),
         symptom_name=symptom_name,
-        user_email = get_user_email(),
     )
     return "update symptom"
 
@@ -441,3 +435,11 @@ def add_review():
         name=name,
     )
     return dict(id=review_id, user_id=r.id, name=name)
+
+@action('delete_review')
+@action.uses(db, url_signer.verify(), session, auth.user)
+def delete_review():
+    id=request.params.get('id')
+    assert id is not None
+    db(db.review.id == id).delete()
+    return "delete review"

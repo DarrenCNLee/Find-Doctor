@@ -1,4 +1,4 @@
-timestamp: 2022-06-06T05:54:15.250374
+timestamp: 2022-06-07T23:04:34.057959
 CREATE TABLE "auth_user"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "email" CHAR(512) UNIQUE,
@@ -11,655 +11,62 @@ CREATE TABLE "auth_user"(
     "past_passwords_hash" TEXT
 );
 success!
-timestamp: 2022-06-06T05:54:15.295544
+timestamp: 2022-06-07T23:04:34.080280
 CREATE TABLE "auth_user_tag_groups"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "tagpath" CHAR(512),
     "record_id" INTEGER REFERENCES "auth_user" ("id") ON DELETE CASCADE  
 );
 success!
-timestamp: 2022-06-06T05:54:15.327913
+timestamp: 2022-06-07T23:04:34.099623
 CREATE TABLE "user_info"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "first_name" CHAR(512),
     "last_name" CHAR(512),
+    "location" CHAR(512),
+    "lat" CHAR(512),
+    "lng" CHAR(512),
     "age" CHAR(512),
     "sex" CHAR(512),
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2022-06-06T05:54:15.360933
+timestamp: 2022-06-07T23:04:34.113511
 CREATE TABLE "symptom"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "symptom_name" CHAR(512),
     "user_email" CHAR(512)
 );
 success!
-timestamp: 2022-06-06T05:54:15.390192
+timestamp: 2022-06-07T23:04:34.135335
 CREATE TABLE "symptoms"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "symptom_name" CHAR(512)
 );
 success!
-timestamp: 2022-06-06T05:54:15.414367
+timestamp: 2022-06-07T23:04:34.148727
 CREATE TABLE "diseases"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "disease_name" CHAR(512)
 );
 success!
-timestamp: 2022-06-06T05:54:15.440283
+timestamp: 2022-06-07T23:04:34.161623
 CREATE TABLE "doctor"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
     "name" CHAR(512),
-    "doctor_type" CHAR(512)
+    "address" CHAR(512)
 );
 success!
-timestamp: 2022-06-06T05:54:15.471089
+timestamp: 2022-06-07T23:04:34.176007
 CREATE TABLE "review"(
     "id" INTEGER PRIMARY KEY AUTOINCREMENT,
-    "doctor_info" INTEGER REFERENCES "doctor" ("id") ON DELETE CASCADE  ,
+    "doctor_name" CHAR(512),
     "star_rating" CHAR(512),
     "review_message" CHAR(512),
     "name" CHAR(512),
-    "user_info" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  
+    "user_email" CHAR(512),
+    "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  
 );
-success!
-timestamp: 2022-06-06T20:51:44.636423
-ALTER TABLE "user_info" ADD "location" CHAR(512);
-success!
-timestamp: 2022-06-06T22:50:25.606532
-ALTER TABLE "user_info" ADD "lat" CHAR(512);
-timestamp: 2022-06-06T22:50:25.620480
-ALTER TABLE "user_info" ADD "lng" CHAR(512);
-success!
-timestamp: 2022-06-07T21:36:43.248897
-ALTER TABLE "doctor" ADD "address" CHAR(512);
-timestamp: 2022-06-07T21:36:43.260201
-ALTER TABLE "doctor" ADD "reviewed" CHAR(512);
-success!
-success!
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-timestamp: 2022-06-07T22:26:16.174061
-ALTER TABLE "review" ADD "doctor_name" CHAR(512);
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-timestamp: 2022-06-07T22:31:33.831908
-ALTER TABLE "review" ADD "doctor_id" INTEGER REFERENCES "doctor" ("id") ON DELETE CASCADE  ;
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-timestamp: 2022-06-07T20:41:17.199644
-ALTER TABLE "review" ADD "user_name" CHAR(512);
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-timestamp: 2022-06-07T20:52:05.673322
-ALTER TABLE "review" ADD "user_id" INTEGER REFERENCES "user_info" ("id") ON DELETE CASCADE  ;
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-success!
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
-success!
-DELETE FROM "doctor";
-DELETE FROM sqlite_sequence WHERE name='doctor'
 success!
 DELETE FROM "doctor";
 DELETE FROM sqlite_sequence WHERE name='doctor'

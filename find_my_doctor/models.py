@@ -78,6 +78,7 @@ db.define_table(
     Field('star_rating', requires=IS_FLOAT_IN_RANGE(0, 5), default=0),
     Field('review_message'),
     Field('name', requires=IS_NOT_EMPTY()),
+    Field('user_email', requires=IS_NOT_EMPTY(), default=get_user_email),
     Field('user_id', 'reference user_info')
 )
 
